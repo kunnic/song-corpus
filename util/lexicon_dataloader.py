@@ -1,6 +1,6 @@
 from .dataloader import DataLoader
 import pandas as pd
-from typing import Dict, Any
+from typing import Dict
 
 LEXICON_COLUMNS = [
     'english', 'vietnamese',
@@ -18,7 +18,7 @@ class LexiconDataLoader(DataLoader):
     def load(self) -> Dict[str, Dict[str, int]]:
         df = self._load_dataframe()
         df['id'] = range(len(df))
-        self._data = df.set_index('id').to_dict(orient='index')
+        self._data = df.set_index('vietnamese').to_dict(orient='index')
         print(f"Lexicon loaded: {len(self._data)} words.")
         return self._data
     
@@ -41,7 +41,8 @@ class LexiconDataLoader(DataLoader):
             score_cols = LEXICON_COLUMNS[2:]
             df[score_cols] = df[score_cols].fillna(0).astype(int)
             
-            # df = df.drop_duplicates(subset=['vietnamese'])
+            # keep only unique vietnamese words for indexing
+            df = df.drop_duplicates(subset=['vietnamese'], keep=False)
             return df
             
         except Exception as e:
