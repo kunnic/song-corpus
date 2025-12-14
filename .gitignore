@@ -215,8 +215,4 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-/data
 __init__.py
-model/lexicon_model.py
-model/lexicon_short.py
-model/model.py

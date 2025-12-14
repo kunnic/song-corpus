@@ -11,12 +11,15 @@ CORPUS_COLUMNS = [
 ]
 
 class CorpusDataLoader(DataLoader):
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str, limit: int = None):
         super().__init__(file_path)
+        self.limit = limit
         self.load()
 
     def load(self) -> pd.DataFrame:
         df = self._load_dataframe()
+        if self.limit is not None:
+            df = df.head(self.limit)
         self._data = df
         print(f"Corpus loaded: {len(self._data)} records.")
         return self._data
@@ -56,14 +59,19 @@ class CorpusDataLoader(DataLoader):
         if column not in self._data.columns:
             raise ValueError(f"Column '{column}' not found in dataframe")
         
-        print(f"Tokenizing {column} column...")
-        tokenized = self._data[column].apply(
-            lambda text: word_tokenize(str(text)) if pd.notna(text) else ""
+        text_check = lambda text: word_tokenize(
+            str(text).lower()
         )
+
+        print(f"Tokenizing {column} column...")
+        tokenized = self._data[column].apply(text_check)
         print(f"Tokenization complete.")
         return tokenized
     
-    def add_tokenized_column(self, source_column: str = 'lyrics', 
-                            target_column: str = 'lyrics_tokenized') -> None:
+    def add_tokenized_column(
+        self, 
+        source_column: str = 'lyrics', 
+        target_column: str = 'lyrics_tokenized'
+    ) -> None:
         self._data[target_column] = self.tokenize_lyrics(source_column)
         print(f"Added '{target_column}' column to dataframe.")

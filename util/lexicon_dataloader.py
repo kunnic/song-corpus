@@ -39,10 +39,10 @@ class LexiconDataLoader(DataLoader):
             df['vietnamese'] = df['vietnamese'].str.lower().str.strip()
             
             score_cols = LEXICON_COLUMNS[2:]
-            df[score_cols] = df[score_cols].fillna(-1).astype(int)
+            df[score_cols] = df[score_cols].fillna(0).astype(int)
             
             # keep only unique vietnamese words for indexing
-            df = df.drop_duplicates(subset=['vietnamese'], keep=False)
+            df = df.drop_duplicates(subset=['vietnamese'], keep='first')
             return df
             
         except Exception as e:
