@@ -7,5 +7,5 @@ class BaseModel(ABC):
     def predict(self, tokens: List[str]) -> Any:
         pass
     @abstractmethod
-    def predict_dataset(self, dataframe: DataFrame, tokenized_text_column: str) -> DataFrame:
+    def predict_dataset(self, dataframe: DataFrame, tokenized_col_name: str) -> DataFrame:
         pass

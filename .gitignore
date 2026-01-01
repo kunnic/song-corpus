@@ -220,3 +220,6 @@ __init__.py
 /temp
 /data
 data/
+/tex
+    
+/.vscode
