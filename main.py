@@ -1,3 +1,4 @@
+# ───────────────────────────────────────────────────────────────────
 import numpy as np
 
 from song import Song
@@ -7,12 +8,14 @@ from emolex import (
     JOY,
     TRUST,
 )
+# ───────────────────────────────────────────────────────────────────
 
 def main():
 
     song = Song(
-        name="Xiaoxin",
-        lyrics="I just wanna let you know, wo zhi shi ai de xiao xin."
+        name = "Xiaoxin",
+        lyrics = "I just wanna let you know, \
+            wo zhi shi ai de xiao xin."
     )
 
     print("Song")
@@ -20,9 +23,9 @@ def main():
     print(f"  Lyrics: {song.lyrics}\n")
 
     word = EmolexWord(
-        word="happy",
-        sentiments=np.uint8(0b00000001),
-        emotions=np.uint8(JOY | TRUST)
+        word = "happy",
+        sentiments = np.uint8(0b00000001),
+        emotions = np.uint8(JOY | TRUST)
     )
 
     print("EmoLex Entry")
