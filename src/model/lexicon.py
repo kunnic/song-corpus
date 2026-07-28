@@ -7,29 +7,29 @@ class LexiconModel(BaseModel):
     def __init__(self):
         pass
 
-    def predict_single(self, tokens: list[str]) -> ModelResult:
-        pass
+    def predict_single(self, tokens: np.ndarray) -> ModelResult:
+        '''
+            using the emolex, predict the emotions of the line.
+            - args:
+            + input: tokens: the input line in 
+        '''
+        
 
     # Implement later if optimization is possible,
     #   + multithreading or other way to make
     #       it run better than looping.
     def predict_batch(self, 
-            token_list: list[list[str]]
+            token_list: np.ndarray
         ) -> list[ModelResult]:
         pass
 
     def predict(self, 
-            tokens: list[str] | list[list[str]]
+            tokens: np.ndarray
         ) -> ModelResult | list[ModelResult]:
-        if isinstance(tokens, list):
+        if isinstance(tokens, np.ndarray):
             return [
                 self.predict_single(tokens = token) 
                 for token in tokens
             ]
         return predict_single(tokens = tokens)
-
-    # if isinstance(image, list):
-    #         return [self._recognize_single(item) for item in image]
-    #     return self._recognize_single(image)
-    
 # ───────────────────────────────────────────────────────────────────
