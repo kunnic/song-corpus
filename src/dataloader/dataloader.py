@@ -120,3 +120,40 @@ class CorpusDataloader(Dataloader):
 
         return CorpusData(instances = instances)
 # ───────────────────────────────────────────────────────────────────
+class EmolexDataloader():
+    COLUMNS = [
+        'english', 'vietnamese',
+        'positive', 'negative',
+        'anger', 'anticipation', 'disgust', 'fear',
+        'joy', 'sadness', 'surprise', 'trust',
+        'sum',
+    ]
+    EMOTION_COLS = [
+        'anger', 'anticipation', 'disgust', 'fear',
+        'joy', 'sadness', 'surprise', 'trust',
+    ]
+
+    def load(self, path: str) -> EmolexDictionary:
+        df = pd.read_excel(path)
+        df.columns = self.COLUMNS
+
+        df['vietnamese'] = df['vietnamese'] \
+                            .astype(str) \
+                            .str.lower() \
+                            .str.strip()
+        df[self.EMOTION_COLS] = df[self.EMOTION_COLS] \
+                            .fillna(0).astype(int)
+        df = df.drop_duplicates(
+            subset=['vietnamese'], 
+            keep='first'
+        )
+
+        words   = df['vietnamese'].tolist()
+        scores  = df[self.EMOTION_COLS].values.tolist()
+
+        return Dataloader.load_emolex(
+            words_list      = words,
+            scores_matrix   = scores,
+            feature_names   = self.EMOTION_COLS,
+        )
+# ───────────────────────────────────────────────────────────────────
