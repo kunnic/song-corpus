@@ -8,6 +8,8 @@ import re
 
 from underthesea import word_tokenize
 
+from emolex import EmolexDictionary
+
 VNESE_REGEX = re.compile(
     r'[^a-zA-Z0-9\s'
     r'àáảãạăắằẳẵặâấầẩẫậ'
@@ -74,7 +76,7 @@ class CorpusDataloader(Dataloader):
             return ""
         
         text = str(text).replace('\n', ' ')
-        text = self.VNESE_REGEX.sub('', text)
+        text = VNESE_REGEX.sub('', text)
         text = re.sub(r'\s+', ' ', text).strip()
         return text.lower()
 
@@ -82,7 +84,7 @@ class CorpusDataloader(Dataloader):
         target_path = custom_path if custom_path else self.default_path
 
         if not target_path:
-            raise ValueError("Vui lòng cung cấp đường dẫn corpus (corpus_path)!")
+            raise ValueError("Path invalid.")
 
 
         file_path = Path(target_path)

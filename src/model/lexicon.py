@@ -1,7 +1,7 @@
 # ───────────────────────────────────────────────────────────────────
-from model import BaseModel, ModelResult
-# ───────────────────────────────────────────────────────────────────
+import numpy as np
 
+from model import BaseModel, ModelResult
 # ───────────────────────────────────────────────────────────────────
 class LexiconModel(BaseModel):
     def __init__(self):
