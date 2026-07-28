@@ -14,6 +14,7 @@ class LexiconModel(BaseModel):
             + input: tokens: the input line in 
         '''
         
+        
 
     # Implement later if optimization is possible,
     #   + multithreading or other way to make
@@ -22,14 +23,4 @@ class LexiconModel(BaseModel):
             token_list: np.ndarray
         ) -> list[ModelResult]:
         pass
-
-    def predict(self, 
-            tokens: np.ndarray
-        ) -> ModelResult | list[ModelResult]:
-        if isinstance(tokens, np.ndarray):
-            return [
-                self.predict_single(tokens = token) 
-                for token in tokens
-            ]
-        return predict_single(tokens = tokens)
 # ───────────────────────────────────────────────────────────────────
