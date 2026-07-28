@@ -32,9 +32,18 @@ class EmolexWord:
     emotions: np.uint8
         
     def is_positive(self) -> bool:
-        # return True if the positive sentiment bit is set.
+        '''
+            - return True if the sentimental value is positive.
+            - args:
+                + output: bool value if it's positive or else.
+        '''
         return bool(self.sentiments & np.uint8(1))
 
     def has_emotion(self, emotion: np.uint8) -> bool:
-        # return True if the specified emotion bit is set.
+        '''
+            - return True if the specified emotion bit is set.
+            - args:
+                + input: emotion e: a numpy number uint8.
+                + output: bool value if e exist or not.
+        '''
         return bool(self.emotions & emotion)
