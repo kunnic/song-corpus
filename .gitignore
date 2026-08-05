@@ -1,14 +1,37 @@
-# Python-generated files
+# Python bytecode & cache
 __pycache__/
 *.py[oc]
 build/
 dist/
 wheels/
-*.egg-info
+*.egg-info/
 
-# Virtual environments
-.venv
-/data
+# Environments & package managers
+.venv/
+.uv_cache/
 
+# Large datasets & binary artifacts
+/data/
+*.parquet
+*.pkl
+*.zip
+*.tar.gz
+*.checkpoint
+
+# Academic manuscripts & auxiliary output
+LaTeX2e+Proceedings+Template+ZIP/
+archive/
+scratch/
+outputs/
+submit/
+submit2/
+*.tex
+*.bib
+*.txt
+
+# Working notebooks & temp scripts
 test_*.py
 *.ipynb
+run_paper1_experiments.py
+verify_paper_tables.py
+ViEmoLyrics/
