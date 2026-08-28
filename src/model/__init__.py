@@ -1,12 +1,12 @@
 # ==============================================================================
+from model.lexicon import LexiconModel
 from model.model import (
     BaseModel,
-    ModelParams,
-    ModelResult,
-    LexiconModel,
     ClassicalModel,
     DeepModel,
     LLMModel,
+    ModelParams,
+    ModelResult,
 )
 # ==============================================================================
 
