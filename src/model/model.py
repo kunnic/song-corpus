@@ -78,33 +78,3 @@ class ClassicalModel(BaseModel):
         return None
 
 # ==============================================================================
-
-class DeepModel(BaseModel):
-    def predict_single(
-            self, 
-            tokens: np.ndarray
-        ) -> ModelResult | None:
-        return None
-
-    def predict_batch(
-            self, 
-            token_list: np.ndarray | list[np.ndarray]
-        ) -> list[ModelResult] | None:
-        return None
-
-# ==============================================================================
-
-class LLMModel(BaseModel):
-    def predict_single(
-            self, 
-            tokens: np.ndarray
-        ) -> ModelResult | None:
-        return None
-
-    def predict_batch(
-            self, 
-            token_list: np.ndarray | list[np.ndarray]
-        ) -> list[ModelResult] | None:
-        return None
-
-# ==============================================================================

@@ -1,13 +1,14 @@
 # ==============================================================================
+from model.bilstm import BiLSTMModel
 from model.lexicon import LexiconModel
+from model.llm import LLMModel
 from model.model import (
     BaseModel,
     ClassicalModel,
-    DeepModel,
-    LLMModel,
     ModelParams,
     ModelResult,
 )
+from model.phobert import PhoBERTModel
 # ==============================================================================
 
 __all__  =  [
@@ -16,7 +17,8 @@ __all__  =  [
     "ModelResult",
     "LexiconModel",
     "ClassicalModel",
-    "DeepModel",
+    "PhoBERTModel",
+    "BiLSTMModel",
     "LLMModel",
 ]
 
