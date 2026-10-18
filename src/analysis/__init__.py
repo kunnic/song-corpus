@@ -1,4 +1,6 @@
 # ==============================================================================
+from analysis.bias import ZipfianBiasAnalyzer, ZipfianBiasResult
+from analysis.statistics import CorpusAnalyzer, CorpusStatistics
 from analysis.trajectory import (
     TrajectoryAnalyzer,
     TrajectoryStatistics,
@@ -7,6 +9,10 @@ from analysis.trajectory import (
 # ==============================================================================
 
 __all__  =  [
+    "CorpusAnalyzer",
+    "CorpusStatistics",
+    "ZipfianBiasAnalyzer",
+    "ZipfianBiasResult",
     "TrajectoryAnalyzer",
     "TrajectoryStatistics",
     "compute_normalized_shannon_entropy",
