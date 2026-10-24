@@ -20,25 +20,28 @@ class BaseModel(ABC):
     @abstractmethod
     def predict_batch(
             self, 
-            token_list: np.ndarray
+            token_list: np.ndarray | list[np.ndarray]
         ) -> list[ModelResult]:
         pass
 
     def predict(
             self, 
-            tokens: np.ndarray
+            tokens: np.ndarray | list[np.ndarray]
         ) -> ModelResult | list[ModelResult]:
         
-        if not isinstance(tokens, np.ndarray):
-            raise TypeError("Args must be numpy.ndarray.")
+        if isinstance(tokens, list):
+            return self.predict_batch(token_list=tokens)
 
-        if tokens.ndim == 2:
-            return self.predict_batch(tokens=tokens)
+        if not isinstance(tokens, np.ndarray):
+            raise TypeError("Args must be numpy.ndarray or list[numpy.ndarray].")
+
+        if tokens.ndim == 2 or tokens.dtype == object:
+            return self.predict_batch(token_list=tokens)
         elif tokens.ndim == 1:
             return self.predict_single(tokens=tokens)
         else:
             raise ValueError(
-                "Only single token (1 dim) "
-                "and an array of token (2 dim) is allowed."
+                "Only single token array (1 dim) "
+                "and a batch of token arrays (2 dim or list) are allowed."
             )
 # ───────────────────────────────────────────────────────────────────

@@ -7,8 +7,8 @@ import numpy as np
 import pandas as pd
 from underthesea import word_tokenize
 
-from corpus import CorpusInstance, CorpusData
-from emolex import EmolexDictionary
+from dataloader.corpus import CorpusInstance, CorpusData
+from dataloader.emolex import EmolexDictionary
 # ───────────────────────────────────────────────────────────────────
 
 VNESE_REGEX = re.compile(
@@ -34,19 +34,29 @@ class Dataloader(ABC):
 
     @staticmethod
     def load_emolex(
-            words_list:     list[str], 
-            scores_matrix:  list[list[int]], 
-            feature_names:  list[str]
-        ):
+            words_list:        list[str], 
+            scores_matrix:     list[list[int]], 
+            feature_names:     list[str],
+            sentiment_matrix:  list[list[int]] | None = None,
+            sentiment_names:   list[str] | None = None,
+        ) -> EmolexDictionary:
         
         word_to_index = {
             str(word): index 
             for index, word in enumerate(words_list)
         }
         numpy_matrix = np.array(scores_matrix, dtype = np.uint8)
+        numpy_sentiment_matrix = (
+            np.array(sentiment_matrix, dtype = np.uint8)
+            if sentiment_matrix is not None else None
+        )
 
         return EmolexDictionary(
-            word_to_index, numpy_matrix, feature_names
+            word_to_index    = word_to_index,
+            matrix           = numpy_matrix,
+            emotions         = feature_names,
+            sentiment_matrix = numpy_sentiment_matrix,
+            sentiments       = sentiment_names,
         )
 # ───────────────────────────────────────────────────────────────────
 class CorpusDataloader(Dataloader):
@@ -74,7 +84,8 @@ class CorpusDataloader(Dataloader):
             raise ValueError("Path invalid.")
 
         file_path = Path(target_path)
-        if file_path.suffix.lower() == '.csv':
+        suffix = file_path.suffix.lower()
+        if suffix == '.csv':
             try:
                 df = pd.read_csv(
                     file_path, 
@@ -86,10 +97,12 @@ class CorpusDataloader(Dataloader):
                     encoding='utf-8', 
                     sep='\t'
                 )
-        elif file_path.suffix.lower() in ['.xls', '.xlsx']:
+        elif suffix in ['.xls', '.xlsx']:
             df = pd.read_excel(file_path)
+        elif suffix == '.parquet':
+            df = pd.read_parquet(file_path)
         else:
-            raise ValueError("Only .csv/.xlsx are supported")
+            raise ValueError("Only .csv/.xlsx/.parquet are supported")
 
         instances = []
         skipped_count = 0
@@ -128,6 +141,9 @@ class EmolexDataloader():
         'joy', 'sadness', 'surprise', 'trust',
         'sum',
     ]
+    SENTIMENT_COLS = [
+        'positive', 'negative',
+    ]
     EMOTION_COLS = [
         'anger', 'anticipation', 'disgust', 'fear',
         'joy', 'sadness', 'surprise', 'trust',
@@ -141,6 +157,8 @@ class EmolexDataloader():
                             .astype(str) \
                             .str.lower() \
                             .str.strip()
+        df[self.SENTIMENT_COLS] = df[self.SENTIMENT_COLS] \
+                            .fillna(0).astype(int)
         df[self.EMOTION_COLS] = df[self.EMOTION_COLS] \
                             .fillna(0).astype(int)
         df = df.drop_duplicates(
@@ -148,12 +166,15 @@ class EmolexDataloader():
             keep='first'
         )
 
-        words   = df['vietnamese'].tolist()
-        scores  = df[self.EMOTION_COLS].values.tolist()
+        words            = df['vietnamese'].tolist()
+        scores           = df[self.EMOTION_COLS].values.tolist()
+        sentiment_scores = df[self.SENTIMENT_COLS].values.tolist()
 
         return Dataloader.load_emolex(
-            words_list      = words,
-            scores_matrix   = scores,
-            feature_names   = self.EMOTION_COLS,
+            words_list       = words,
+            scores_matrix    = scores,
+            feature_names    = self.EMOTION_COLS,
+            sentiment_matrix = sentiment_scores,
+            sentiment_names  = self.SENTIMENT_COLS,
         )
 # ───────────────────────────────────────────────────────────────────

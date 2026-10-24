@@ -9,6 +9,7 @@ wheels/
 # Virtual environments
 .venv
 /data
+/archive
 
 test_*.py
 *.ipynb

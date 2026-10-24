@@ -58,9 +58,11 @@ class EmolexWord:
 # ───────────────────────────────────────────────────────────────────
 @dataclass(slots = True, frozen = True)
 class EmolexDictionary:
-    word_to_index:  dict[str, int]
-    matrix:         np.ndarray
-    emotions:       list[str]
+    word_to_index:    dict[str, int]
+    matrix:           np.ndarray
+    emotions:         list[str]
+    sentiment_matrix: np.ndarray | None = None
+    sentiments:       list[str] | None = None
 
     def get_index(self, tokens: list[str]) -> list[int]:
         return [
