@@ -11,7 +11,9 @@ wheels/
 .uv_cache/
 
 # Large datasets & binary artifacts
-/data/
+/data/*
+!/data/pilot/
+!/data/pilot/*
 *.parquet
 *.pkl
 *.zip

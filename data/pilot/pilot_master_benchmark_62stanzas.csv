@@ -1,0 +1,267 @@
+song_id,title,category,composer,stanza_id,stanza_idx,total_stanzas,is_repeated,dup_of_stanza_idx,stanza_text,label_human,label_setup_b,is_changed_in_context,linguistic_tags,label_vnemolex,label_gemini,gemini_rationale,is_human_gemini_match,is_human_emolex_match
+PILOT_01,Một lần là người ấy,Nhạc Trẻ,"Phan Viết Tính, Trung Ngon",S1_1,1,5,False,,"Có rất nhiều chuyện anh muốn nói với em
+Nhưng anh không đủ can đảm, để nói ra
+Nên đành gói gọn trong tiếng thở dài.",sadness,sadness,False,,neutral,sadness,"Sự bất lực, dồn nén tâm tư không thể giãi bày đọng lại trong tiếng thở dài buồn bã.",True,False
+PILOT_01,Một lần là người ấy,Nhạc Trẻ,"Phan Viết Tính, Trung Ngon",S1_2,2,5,False,,"Có rất nhiều lần lầm tưởng hơi ấm đấy
+Là của anh thế nhưng không phải
+Hóa ra là tia nắng mặt trời của người khác.",sadness,sadness,False,,anticipation,sadness,"Nỗi xót xa, hụt hẫng khi nhận ra hơi ấm yêu thương không thuộc về mình mà thuộc về người khác.",True,False
+PILOT_01,Một lần là người ấy,Nhạc Trẻ,"Phan Viết Tính, Trung Ngon",S1_3,3,5,False,,"T-ĐK:
+Trái tim anh là gã mơ dính bụi trần hu wo wo
+Vắng em thì anh cũng sai nhịp
+Rồi lùi dần vào bóng tối.",neutral,neutral,False,,disgust,sadness,"Cảm giác cô đơn, lạc lõng và chìm dần vào bóng tối u sầu khi thiếu vắng người mình yêu.",False,False
+PILOT_01,Một lần là người ấy,Nhạc Trẻ,"Phan Viết Tính, Trung Ngon",S1_4,4,5,False,,"Mong ước thấy mình là người ấy
+Anh cứ nghĩ mình là người ấy
+Anh ước muốn một, lần là người ấy
+Để trọn vẹn được có em trong vài giây.",anticipation,anticipation,False,,anticipation,anticipation,Khát khao và ước vọng mãnh liệt được một lần ở vị trí của người ấy để có được người thương.,True,True
+PILOT_01,Một lần là người ấy,Nhạc Trẻ,"Phan Viết Tính, Trung Ngon",S1_5,5,5,False,,"Anh cố gắng nhưng chẳng ai hay
+Năm tháng ấy anh chắc không may
+Nên đến sau một người gặm nhấm những nỗi đắng cay.",sadness,sadness,False,,disgust,sadness,"Sự tủi thân, chấp nhận số phận đứng phía sau và một mình chịu đựng nỗi cay đắng của tình đơn phương.",True,False
+PILOT_02,Lại một lần nữa,Nhạc Trẻ,Trịnh Lam,S2_1,1,5,False,,"Lại một lần nữa chia tay người yêu hỡi
+Lại một lần nữa chia tay về hai lối, đường ai nấy đi
+Khóc cho nhiều, tình cũng đã vụt bay
+Hứa cho nhiều, rồi mai khi tàn cơn say còn nhớ hay quên?",sadness,sadness,False,tuong_phan,anger,sadness,"Nỗi đau khổ, tuyệt vọng và bất lực trước cảnh chia ly lặp lại cùng những lời hứa phai tàn.",True,False
+PILOT_02,Lại một lần nữa,Nhạc Trẻ,Trịnh Lam,S2_2,2,5,False,,"Lại một lần nữa, cô đơn từng đêm vắng
+Lại một lần nữa, cô đơn từng đêm trắng, vì sao hỡi em?
+Giữ trong lòng, càng nhung nhớ càng đau
+Hãy quay về, cùng ai xây dựng tương lai, đang chờ đón em về.",sadness,sadness,False,,anticipation,sadness,"Sự cô đơn trong đêm vắng và nỗi chua xót, vỡ mộng khi tình yêu lại một lần nữa thay đổi.",True,False
+PILOT_02,Lại một lần nữa,Nhạc Trẻ,Trịnh Lam,S2_3,3,5,False,,"T-ĐK:
+Giờ còn lại, bóng tối vây quanh đời anh
+Đời còn dài, rồi mai đây, không dám yêu một ai nữa.",sadness,sadness,False,,anticipation,sadness,"Cảm giác bơ vơ, tuyệt vọng trong bóng tối và nỗi đau bị người thương nhẫn tâm bỏ rơi.",True,False
+PILOT_02,Lại một lần nữa,Nhạc Trẻ,Trịnh Lam,S2_4,4,5,False,,"Lại một lần nữa, chia tay người yêu hỡi, đường ai nấy đi
+Lại một lần nữa, con tim chợt băng giá, vì hai chữ yêu thương
+Lỡ yêu rồi, lời ai nói giờ như gió bay
+Để giờ đây, ôm tình oan trái, riêng mình.",sadness,sadness,False,,anticipation,sadness,"Nỗi bi thương, cô độc khi bị người yêu vội vàng rời bỏ, để lại bản thân bật khóc trong đêm dài.",True,False
+PILOT_02,Lại một lần nữa,Nhạc Trẻ,Trịnh Lam,S2_5,5,5,False,,"Đường về hai lối anh mong được quên hết tình sao đắng cay
+Đường về hai lối đêm nay chợt băng giá, vì không có em yêu
+Lỡ yêu rồi, mà sao nỡ vội quay bước đi
+Để tình anh thêm một lần nữa, chợt nát tan.",sadness,sadness,False,,anticipation,sadness,Dù mong mỏi bình yên nhưng cảm xúc đọng lại cuối cùng vẫn là thực tại cô đơn phải tự mình gặm nhấm nỗi đau.,True,False
+PILOT_03,Nếu còn có kiếp sau,Nhạc Trẻ,Hamlet Trương,S3_1,1,4,False,,"Kể từ ngày yêu em anh đã mơ hồ nhận ra mình thật mong manh
+Sợ rằng cảm giác ấy chỉ đến với anh một lần với em
+Rồi cuộc sống cho anh nhiều điều và cũng lấy đi thật nhiều điều
+Nhưng thật may bên anh vẫn còn có em.",trust,trust,False,,joy,trust,"Sự an tâm, biết ơn và cảm giác gắn kết vững vàng khi sau bao mất mát của cuộc sống vẫn còn người thương bên cạnh.",True,False
+PILOT_03,Nếu còn có kiếp sau,Nhạc Trẻ,Hamlet Trương,S3_2,2,4,False,,"Tựa đầu vào vai anh nước mắt em rơi bình yên, từng giọt long lanh
+Gục đầu vào tim anh em ước chi em đừng yêu quá nhanh
+Điều gì đó trong đôi mắt người làm cả thế gian như ngừng trôi
+Chỉ vậy thôi anh không còn gì để nói.",trust,trust,False,,anticipation,joy,"Cảm giác hạnh phúc bình dị, ngọt ngào khi được nắm tay và trao lời yêu thương mỗi ngày bên người mình yêu.",False,False
+PILOT_03,Nếu còn có kiếp sau,Nhạc Trẻ,Hamlet Trương,S3_3,3,4,False,,"Nếu một ngày ta phải buộc lòng buông đôi cánh tay
+Vẫn muốn yêu em trọn kiếp này
+Nếu như thật may mắn cuộc đời anh có kiếp sau
+Vẫn xin được yêu em một lần nữa.",trust,trust,False,,joy,fear,"Nỗi lo sợ, hoang mang trước viễn cảnh phải buông tay và bước đi vô định trên đường đời không có người thương.",False,False
+PILOT_03,Nếu còn có kiếp sau,Nhạc Trẻ,Hamlet Trương,S3_4,4,4,False,,"Và nếu như cuộc đời anh buộc lòng phải đánh mất em
+Chẳng muốn yêu thêm ai quá nhiều
+Những năm dài yêu dấu mà lòng anh luôn chắt chiu
+Xin em đừng xa anh tình yêu.",fear,fear,False,,anticipation,trust,"Lời thề nguyện thủy chung son sắt, gắn kết bền chặt và giữ trọn hình bóng người yêu dù qua ngàn kiếp hay cách trở.",False,False
+PILOT_04,Anh hiểu em mà,Nhạc Trẻ,DK Lâm,S4_1,1,4,False,,"Anh biết em chỉ cười nói bên ngoài như thế
+Như ngấn sâu trong lòng còn nhiều suy tư
+Em vẫn hay nói em chẳng quan tâm muốn gì tùy anh
+Nhưng sâu trong lòng mình là những nỗi buồn.",sadness,sadness,False,,sadness,trust,Sự thấu cảm sâu sắc của người-trong-cuộc khi nhìn thấu những suy tư và nỗi buồn giấu sau vẻ ngoài cười nói của người yêu.,False,True
+PILOT_04,Anh hiểu em mà,Nhạc Trẻ,DK Lâm,S4_2,2,4,False,,"Anh hiểu em như thế nào nắng mưa như thế nào
+Khi nặng lời xong em lệ tràn khóe mắt
+Em nghĩ sau hàng trăm lần đôi khi em bất cần
+Em có chắc như thế làm mình vui.",sadness,sadness,False,,joy,trust,"Sự bao dung, thấu hiểu tâm lý đối phương và mong muốn người thương mở lòng đón nhận tình cảm chân thành.",False,False
+PILOT_04,Anh hiểu em mà,Nhạc Trẻ,DK Lâm,S4_3,3,4,False,,"Em là như thế cứ ôm bao lo lắng một mình
+Rồi gồng gánh bao nhiêu nỗi đau một mình
+Đôi lần em muốn nói buông tay cho khỏi đau đầu
+Mà anh biết lòng em có vui gì đâu.",sadness,sadness,False,,fear,trust,"Tấm lòng tri kỷ, khao khát được đồng hành và sẻ chia mọi gánh nặng để người yêu không còn cảm thấy cô độc.",False,False
+PILOT_04,Anh hiểu em mà,Nhạc Trẻ,DK Lâm,S4_4,4,4,False,,"Biết là mạnh mẽ đấy nhưng em đổi lấy được gì
+Tại sao không sẻ chia với anh đôi phần
+Anh hiểu em hết đấy chẳng qua không nói thôi mà
+Phải mạnh mẽ người còn có anh đây mà.",sadness,sadness,False,,neutral,trust,"Khẳng định sự thấu hiểu tuyệt đối và sẵn sàng làm điểm tựa bình an, vững chắc để chở che cho sự yếu đuối của người thương.",False,False
+PILOT_05,Sương mùa thu,Nhạc Trữ tình,Joseph Nguyen (Quốc Hải),S5_1,1,5,False,,"Thành phố mùa thu sương giăng đường mờ
+Đèn đường héo hắt hàng cây khô
+Lắng nghe lá rơi bên thềm, lê bước lang thang đời buồn
+Hồn trôi theo lá tả tơi",sadness,sadness,False,an_du,sadness,sadness,"Nỗi cô đơn, quạnh hiu và hoài niệm buồn bã khi độc bước giữa khung cảnh phố thu đêm vắng tiêu điều.",True,True
+PILOT_05,Sương mùa thu,Nhạc Trữ tình,Joseph Nguyen (Quốc Hải),S5_2,2,5,False,,"Người ghé đời tôi như sương chiều tàn
+Tình bay theo lá vàng rơi rơi
+Vẫn nghe tiếng ai thì thầm lời hứa bên nhau vẹn tình
+Nhòa ướt theo giọt sương thu",sadness,sadness,False,an_du,anticipation,sadness,"Cảm giác bơ vơ, xót xa trước cuộc tình chóng vánh chỉ để lại những kỷ niệm cay đắng không biết tỏ cùng ai.",True,False
+PILOT_05,Sương mùa thu,Nhạc Trữ tình,Joseph Nguyen (Quốc Hải),S5_3,3,5,False,,". Thu về làm dịu mát hồn ai
+Thu về làm thổn thức hồn ai
+Sương mờ tình giăng lối yêu xưa
+Sương buồn tình theo lá bay",sadness,sadness,False,,joy,sadness,"Nỗi bẽ bàng, tiếc nuối khi duyên kiếp mong manh tan vỡ, để lại một mình ôm mối sầu tương tư.",True,False
+PILOT_05,Sương mùa thu,Nhạc Trữ tình,Joseph Nguyen (Quốc Hải),S5_4,4,5,False,,"Thu về cùng làn gió mênh mang
+Thu về tình theo lá thu rơi
+Thương người ngồi sương ướt đôi vai
+Sương buồn thoáng giăng bờ mi",sadness,sadness,False,,sadness,sadness,"Cảm giác tê tái, tủi phận và sầu muộn khi đứng dưới sương lạnh nhớ về người cũ đang ở chốn xa hoa.",True,True
+PILOT_05,Sương mùa thu,Nhạc Trữ tình,Joseph Nguyen (Quốc Hải),S5_5,5,5,False,,"Chợt nhớ người xưa trong sương chiều buồn
+Hàng cây trút lá cành co ro,
+Lắng nghe tiếng ai thì thầm , tiếc nuối cho cuộc tình gầy
+Chìm khuất trong màn sương đêm",sadness,sadness,False,,sadness,sadness,Sự chấp nhận buông xuôi đầy u uất và nỗi cô độc của người lữ khách lạc bước giữa đêm sương.,True,True
+PILOT_06,Biển cạn,Nhạc Trữ tình,Nguyễn Kim Tuấn,S6_1,1,4,False,,"Có người từ lâu nhớ thương biển
+Ngày xưa biển xanh không như bây giờ biển là hoang vắng
+Lời tôi nhỏ bé tiếng gió thét cao biển tràn nỗi đau
+Tình em quá lớn sóng cũng vỡ tan đời tôi đánh mất
+Giấc mơ không còn biển xưa đã cạn",sadness,sadness,False,,anger,sadness,"Nỗi sầu muộn triền miên, dai dẳng ngày đêm được ẩn dụ qua hình ảnh sóng biển xô bờ nghìn năm không dứt.",True,False
+PILOT_06,Biển cạn,Nhạc Trữ tình,Nguyễn Kim Tuấn,S6_2,2,4,False,,"Vắng em trên đời biển thầm than khóc ngàn lần với tôi
+Cùng tôi biển chết, cùng em biển tan
+Ngàn năm nỗi đau hóa kiếp mây ngàn cô đơn biển cạn",sadness,sadness,False,,fear,sadness,"Nỗi đau khổ, bi thương sâu sắc sau cuộc chia ly khiến cảnh vật và lòng người đều thấm đẫm vị mặn của nước mắt.",True,False
+PILOT_06,Biển cạn,Nhạc Trữ tình,Nguyễn Kim Tuấn,S6_3,3,4,False,,"Có người hẹn tôi tới phương trời
+Biển xưa lắng nghe trắng xóa nỗi niềm biển không lên tiếng
+Ðời tôi nhỏ bé trước những khát khao chìm trong nỗi đau
+Tình em quá lớn với những đam mê làm nên oan trái
+Sóng reo não nề hải âu không về",sadness,sadness,False,,fear,trust,"Khẳng định tấm lòng thủy chung, gắn kết son sắt và tình yêu bất biến dù biển cạn đá mòn.",False,False
+PILOT_06,Biển cạn,Nhạc Trữ tình,Nguyễn Kim Tuấn,S6_4,4,4,False,,"* Ðời tôi nhỏ bé trước những khát khao chìm trong nỗi đau
+Ngàn năm nỗi đau hóa kiếp mây ngàn cô đơn biển cạn",sadness,sadness,False,,fear,sadness,"Cảm giác cô quạnh, bất lực trước nỗi đau không biết bao giờ nguôi ngoai cùng tiếng thở dài giữa biển đêm.",True,False
+PILOT_07,Tình xưa,Nhạc Trữ tình,Lê Vinh Quang,S7_1,1,3,False,,"Không gì vui bằng một sớm mai, thức giấc bên ai, nắng vui một ngày
+Ly cà phê và con phố quen, sánh bước bên em, nắng mưa tìm đến
+Bao mùa qua nồng say ái ân, quấn quít đêm xuân, gối chăn nồng ấm
+Tháng năm dài còn nhớ thương nhiều, mộng ước chớ nhau, dấu yêu hẹn thề",joy,joy,False,,joy,joy,"Hồi ức tươi đẹp về khoảnh khắc tình yêu nồng thắm, đắm say và ngập tràn hạnh phúc của đôi lứa thuở ban đầu.",True,True
+PILOT_07,Tình xưa,Nhạc Trữ tình,Lê Vinh Quang,S7_2,2,3,False,,"Không gì vui bằng một giấc mơ, réo rắt bên tai những lời thương nhớ
+Lối em về thêm bước chân người, nên tiếng đàn tôi cũng thêm lẻ loi
+Bao mùa qua tình thêm cách xa, nắng úa bên sông, em về đôi bóng
+Tiễn đưa người đường hoa ngập lối, tàn một đêm vui, là chết tình tôi",sadness,sadness,False,,joy,sadness,"Sự hụt hẫng, đau đớn và xót xa khi bị người thương đột ngột rời bỏ không một lời từ biệt.",True,False
+PILOT_07,Tình xưa,Nhạc Trữ tình,Lê Vinh Quang,S7_3,3,3,False,,"Không gì đau bằng một cách xa, trước lúc chia tay, môi hôn ngọt ngào
+Không gì xa bằng một lãng quên, lúc tiễn đưa em bước vui đường mới
+Bao giờ em về thăm chốn xưa, nắng vẫn bên sông, bên đèn riêng bóng
+Nếu đôi lần em nhớ tên người, một nắm đất bên đồi, ấp ôm một thân tôi",sadness,sadness,False,,joy,sadness,"Nỗi ngậm ngùi, tiếc thương cho một cuộc tình đẹp đã hoàn toàn lụi tàn thành tro than theo năm tháng.",True,False
+PILOT_08,Đời vui với ai,Nhạc Trữ tình,An Dân,S8_1,1,4,False,,"Khi em biết tình ta trong thầm lặng
+Và con tim ta mãi thuộc về nhau
+Nào ai biết một mai ta xa cách
+Một dòng sông có nhớ về mùa đông.",sadness,sadness,False,,neutral,sadness,"Nỗi tủi phận vì cảnh nghèo tay trắng khiến tình duyên dở dang, người yêu quên câu thề ước.",True,False
+PILOT_08,Đời vui với ai,Nhạc Trữ tình,An Dân,S8_2,2,4,False,,"Khi em biết tình yêu ta tuyệt vọng
+Và con tim yêu dấu sẽ tàn phai
+Ta đã mất lạc tìm nhau mãi mãi
+Một lần yêu, ân ái gió thu lay.",sadness,sadness,False,,joy,sadness,"Nỗi đau đớn như cắt và sự cay đắng, tủi hờn khi chứng kiến người mình yêu bước lên xe hoa cùng người giàu sang.",True,False
+PILOT_08,Đời vui với ai,Nhạc Trữ tình,An Dân,S8_3,3,4,False,,"Và dòng sông đó đừng băng giá như mùa đông
+Mộng lòng chưa phai, người yêu hỡi có bao giờ nguôi
+Thời gian vẫn trôi, dòng đời cách ngăn đôi
+Giọt mưa vẫn rơi lạnh lùng tim tan vỡ.",sadness,sadness,False,,anticipation,sadness,"Cảm giác đơn côi, chán chường và phải tìm đến men rượu cay nơi gác trọ để một mình gặm nhấm nỗi buồn.",True,False
+PILOT_08,Đời vui với ai,Nhạc Trữ tình,An Dân,S8_4,4,4,False,,"Thì thôi anh nhé để em bước đi lẻ loi
+Một lần bên nhau tình như đã nhớ nhau dài lâu
+Thì thôi nhé anh, tình là giác mơ thôi
+Đời vui với ai buồn nào mưa vẫn rơi.",sadness,sadness,False,,joy,sadness,"Sự buông xuôi, chấp nhận số phận cô đơn phong trần và nén nỗi đau vào lòng để người cũ được thanh thản.",True,False
+PILOT_09,Từ miền xa người nghĩ về,Nhạc Vàng,Hoài An,S9_1,1,3,False,,"Vì cuộc máu xương năm xưa nên anh bỏ học lên đường
+Từ hạ đến thu sang đông quanh năm đã đầy nghĩa sống
+Những chiều chìm lấn trong mây những chiều luyến nhớ dâng đầy
+Lắm lần muốn mời các em ra đây thăm chơi cho biết một ngày",anticipation,anticipation,False,,fear,anticipation,"Tâm trạng trông ngóng, mong mỏi tin tức bình an từ mẹ hiền và người thương nơi quê nhà từ chốn rừng sâu.",True,False
+PILOT_09,Từ miền xa người nghĩ về,Nhạc Vàng,Hoài An,S9_2,2,3,False,,"Ở đây những ngày hơn thua
+Với đời máu lửa ngỡ lòng mình
+Quên chuyện năm xưa
+Nhưng mỗi khi chiến trường nghỉ ngơi
+Thấy tình giăng rối theo
+Từng dòng kỉ niệm xa xôi",sadness,sadness,False,,sadness,sadness,"Nỗi xót thương, ngậm ngùi khi nghĩ đến cảnh mẹ già nơi quê nhà mỏi mắt rơi lệ ngóng tin con giữa thời chiến chinh.",True,True
+PILOT_09,Từ miền xa người nghĩ về,Nhạc Vàng,Hoài An,S9_3,3,3,False,,"Dù đời đã xui anh đi trong cơn lửa đạn quên về
+Dù đời khuất sau chân mây nhưng bao kỉ niệm còn đây
+Nắng dù rực cháy xanh tươi mưa dù xoá vết chân người
+Những dòng kỉ niệm vẫn nghe khơi lên bâng khuâng thương nhớ từng hồi",sadness,sadness,False,,joy,anticipation,"Niềm hy vọng, kỳ vọng tươi sáng về ngày hòa bình trở về sum họp và trọn vẹn ước mơ đôi lứa.",False,False
+PILOT_10,Tháng Sáu trời mưa,Nhạc Vàng,Mộng Thu Chi,S10_1,1,5,False,,"Tháng Sáu mưa giăng trời
+Chuyện tình yêu đôi mình ai gian dối
+Mà chiều nay gió ru hồn ta say
+Anh hôn tình môi phai
+Để khung trời mưa bay hay lệ đời.",sadness,sadness,False,,joy,anticipation,"Khát khao, mong mỏi mãnh liệt trời đổ mưa để níu giữ thời gian, được ở bên người yêu thật lâu.",False,False
+PILOT_10,Tháng Sáu trời mưa,Nhạc Vàng,Mộng Thu Chi,S10_2,2,5,False,,"Tháng Sáu mưa rơi nhiều
+Chuyện tình yêu chưa lần quen chăn chiếu
+Đời gần nhau có nhau vì thương nhau
+Giấc mơ nào xuôi em
+Bỏ quên người em yêu trong trời đêm.",sadness,sadness,False,,anticipation,fear,"Sự bất an, lo sợ và run rẩy trước dự cảm về cuộc chia ly cách trở hai phương trời vào ngày mai.",False,False
+PILOT_10,Tháng Sáu trời mưa,Nhạc Vàng,Mộng Thu Chi,S10_3,3,5,False,,"Cơn đau qua hồn tình theo gót son mềm
+Còn đâu phút êm đềm nụ môi anh là em.
+Anh đâu có ngờ tình đôi ta chóng phai
+Như lá thu vàng chiều nay dưới trời mây",sadness,sadness,False,,anger,sadness,"Nỗi trống vắng, lạnh lẽo và tiếc nuối khi hơi ấm nồng nàn của tình yêu đã tan biến vào dĩ vãng.",True,False
+PILOT_10,Tháng Sáu trời mưa,Nhạc Vàng,Mộng Thu Chi,S10_4,4,5,False,,"Tháng Sáu mưa giăng trời
+Chuyện tình yêu đôi mình ai gian dối
+Trời còn đây đất đây cảnh xưa đây
+Kế bên người xưa đâu
+Có nghe từng cơn mưa qua hồn xưa",sadness,sadness,False,,anger,sadness,"Cảm giác cô đơn, hụt hẫng và sầu muộn khi độc bước trên con đường mưa rơi vắng bóng người thương.",True,False
+PILOT_10,Tháng Sáu trời mưa,Nhạc Vàng,Mộng Thu Chi,S10_5,5,5,False,,"Tháng sáu trời mưa
+Mưa ngoài trời mưa trong đời
+Mưa ru hồn mưa rơi mưa rơi",sadness,sadness,False,,neutral,sadness,Sự bất lực và nỗi đau khổ đẫm nước mắt khi không thể níu giữ bước chân người yêu rời đi trong mưa.,True,False
+PILOT_11,Tình quê,Nhạc Quê hương,Trường Râu,S11_1,1,5,False,,"Tôi sinh ra miền quê đầy nắng gió
+Cát bụi mờ xóa lấp gót chân son
+Tình quê hương lắng động hơi ấm mẹ
+Cứ nghĩ về mà lòng nhớ không nguôi",anticipation,anticipation,False,,anticipation,trust,"Sự gắn kết bền chặt với cội nguồn và cảm giác bình yên, thân thuộc khi nhớ về hình ảnh người mẹ nơi quê nhà.",False,True
+PILOT_11,Tình quê,Nhạc Quê hương,Trường Râu,S11_2,2,5,False,,"Nơi tôi sinh nhà tôi tường vách đất
+Gió nồm chiều thoảng mát góc không gian
+Một không gian tình cha luôn che chở
+Khi nhớ về mà lệ cứ tuôn rơi",sadness,sadness,False,,joy,joy,"Cảm giác tươi vui, ấm áp và hạnh phúc ngọt ngào khi hồi tưởng về bức tranh tuổi thơ thanh bình nơi quê hương.",False,False
+PILOT_11,Tình quê,Nhạc Quê hương,Trường Râu,S11_3,3,5,False,,"Lòng tôi luôn nghĩ về quê hương ấm
+Nhớ tình mẹ và ghi khắc tình cha
+Đồng quê xanh cánh cò vươn trong nắng
+Nhớ bạn bè và cả lũy tre xanh",anticipation,anticipation,False,,joy,joy,"Niềm vui trong trẻo, hồn nhiên gắn liền với những kỷ niệm tuổi học trò tươi đẹp và êm đềm dưới bóng tre xanh.",False,False
+PILOT_11,Tình quê,Nhạc Quê hương,Trường Râu,S11_4,4,5,False,,"Quê Hương tôi nhà thưa tình vẫn thắm
+Cứ nghĩ nhìn mà lòng nhớ thương cha
+Một quê hương đong đầy hơi {Dm] ấm mẹ
+Mãi nhớ về mảnh đất quê tôi",anticipation,anticipation,False,,fear,trust,"Sự gắn bó thủy chung, lòng biết ơn sâu sắc và niềm tin vững chắc vào tình quê hương nuôi dưỡng tâm hồn.",False,False
+PILOT_11,Tình quê,Nhạc Quê hương,Trường Râu,S11_5,5,5,True,3.0,"Lòng tôi luôn nghĩ về quê hương ấm
+Nhớ tình mẹ và ghi khắc tình cha
+Đồng quê xanh cánh cò vươn trong nắng
+Nhớ bạn bè và cả lũy tre xanh",anticipation,anticipation,False,,joy,joy,"Niềm vui trong trẻo, hồn nhiên gắn liền với những kỷ niệm tuổi học trò tươi đẹp và êm đềm dưới bóng tre xanh.",False,False
+PILOT_12,Quảng Nam một khúc ca,Nhạc Quê hương,"Phạm Cẩm, Thơ: Hưng Thịnh",S12_1,1,4,False,,"Anh lại về thăm Quảng Nam yêu thương
+Đến với Hội An ngắm nhìn chiều Cửa Đại
+Sông Thu Bồn soi bóng đẹp tựa tranh
+Rau Trà Quế đậm đà tô mỳ Quảng
+Nắng đẹp biển xanh An Bàng bao kỷ niệm
+Tình đất tình người gắn kết với yêu thương.",trust,trust,False,,joy,trust,"Cảm giác bình yên, ân tình sâu nặng và niềm tin yêu, tự hào về phẩm chất trung dũng kiên cường của người dân quê hương.",True,False
+PILOT_12,Quảng Nam một khúc ca,Nhạc Quê hương,"Phạm Cẩm, Thơ: Hưng Thịnh",S12_2,2,4,False,,"Quảng Nam ơi! Quảng Nam ơi!
+Tiếng vang xa có tự ngàn xưa
+Mảnh đất địa linh anh hùng hào kiệt
+Những chiến công một thời oanh liệt
+Trang sử vàng lưu mãi ngàn năm.",trust,trust,False,,anticipation,trust,"Sự ấm áp, gắn kết và trân trọng vẻ đẹp thủy chung, nặng nghĩa tình của vùng đất và con người xứ Quảng.",True,False
+PILOT_12,Quảng Nam một khúc ca,Nhạc Quê hương,"Phạm Cẩm, Thơ: Hưng Thịnh",S12_3,3,4,False,,"Anh lại về thăm Quảng Nam yêu thương
+Thánh địa Mỹ Sơn di tích Chàm cổ kính
+Về Duy Xuyên xem nghệ nhân dệt chiếu
+Thăm làng chài năm tháng bám khơi xa.",trust,trust,False,,anticipation,joy,"Niềm hân hoan, phấn khởi và tự hào rạng rỡ ngân vang từ cuộc sống lao động tươi đẹp trên đồng ruộng quê hương.",False,False
+PILOT_12,Quảng Nam một khúc ca,Nhạc Quê hương,"Phạm Cẩm, Thơ: Hưng Thịnh",S12_4,4,4,False,,"Địa đạo Kỳ Anh một thành đồng lũy thép
+Trung hậu đảm đang tượng Mẹ Thứ anh hùng
+Tự hào thay quê hương Quảng Nam đất mẹ
+Trong dựng xây đẹp mãi những công trình.",trust,trust,False,,trust,anticipation,Lời hẹn ước và niềm mong đợi ngày trở lại tái ngộ để cùng hòa vang khúc ca ân tình nơi đất Quảng.,False,True
+PILOT_13,Tôi tin,Nhạc Thánh ca,Lm. Thành Tâm,S13_1,1,5,False,,"Tôi tin, tôi tin Chúa đã thương tôi
+Nên Người đã phải chết, chết vì tôi
+Nên tôi, nên tôi vẫn tin luôn
+Tin Người hay tha thứ dù tội tôi trăm mối
+Tôi tin, tôi tin Chúa vẫn thương tôi
+Cho dù đời tôi bao phen giông tố
+Mãi mãi Chúa là dòng nước trong
+Dạt dào lòng xót thương, muôn đời chẳng hề vơi",trust,trust,False,,trust,trust,"Đức tin tôn giáo tuyệt đối và cảm giác an tâm khi có đấng tối cao soi sáng, dẫn đường vượt qua mọi gian nan.",True,True
+PILOT_13,Tôi tin,Nhạc Thánh ca,Lm. Thành Tâm,S13_2,2,5,False,,"Dù nhiều khi trong bóng đêm, nhìn trời trăng sao ôi đẹp quá
+Nhưng biết đã mấy mùa nhìn lá, đã mấy chiều nhìn mưa,
+Tôi thầm khen Thiên Chúa
+Nhiều khi tôi nhường bước, trước đoàn xe tang qua thành phố
+Than trách Đấng Hoá Công vô tình, sao để khăn tang che mờ
+Bao mái đầu còn xanh",sadness,sadness,False,,joy,trust,"Sự vững lòng, bình an trong tâm hồn và niềm tin tưởng sâu sắc vào tình yêu bao dung, tha thứ của Chúa.",False,False
+PILOT_13,Tôi tin,Nhạc Thánh ca,Lm. Thành Tâm,S13_3,3,5,True,1.0,"Tôi tin, tôi tin Chúa đã thương tôi
+Nên Người đã phải chết, chết vì tôi
+Nên tôi, nên tôi vẫn tin luôn
+Tin Người hay tha thứ dù tội tôi trăm mối
+Tôi tin, tôi tin Chúa vẫn thương tôi
+Cho dù đời tôi bao phen giông tố
+Mãi mãi Chúa là dòng nước trong
+Dạt dào lòng xót thương, muôn đời chẳng hề vơi",trust,trust,False,,trust,trust,"Đức tin tôn giáo tuyệt đối và cảm giác an tâm khi có đấng tối cao soi sáng, dẫn đường vượt qua mọi gian nan.",True,True
+PILOT_13,Tôi tin,Nhạc Thánh ca,Lm. Thành Tâm,S13_4,4,5,False,,"Dù nhiều khi tôi đã quên, người người quanh tôi đang gào đói
+Mơ ước thấy chút tình nồng ấm, thấy chút lòng người thương
+Chia hạt cơm manh áo
+Nhiều khi tôi dừng bước, trên đường chông gai giăng ngập lối
+Than trách Đấng Hoá Công vô tình, sao nỡ phân ly đôi đường
+Cho lắm người buồn đau",sadness,sadness,False,,disgust,anticipation,"Lời cầu nguyện đầy hy vọng và khát khao về một thế giới tương lai ngập tràn yêu thương, bình an và hòa bình.",False,False
+PILOT_13,Tôi tin,Nhạc Thánh ca,Lm. Thành Tâm,S13_5,5,5,True,1.0,"Tôi tin, tôi tin Chúa đã thương tôi
+Nên Người đã phải chết, chết vì tôi
+Nên tôi, nên tôi vẫn tin luôn
+Tin Người hay tha thứ dù tội tôi trăm mối
+Tôi tin, tôi tin Chúa vẫn thương tôi
+Cho dù đời tôi bao phen giông tố
+Mãi mãi Chúa là dòng nước trong
+Dạt dào lòng xót thương, muôn đời chẳng hề vơi",trust,trust,False,,trust,trust,"Đức tin tôn giáo tuyệt đối và cảm giác an tâm khi có đấng tối cao soi sáng, dẫn đường vượt qua mọi gian nan.",True,True
+PILOT_14,Quên đi ưu phiền,Nhạc Trẻ,Vũ Quốc Việt,S14_1,1,3,False,,"Làn gió chiều về bỗng chợt thoáng qua êm đềm
+Là lúc mặt trời sẽ dần khuất sau hàng cây
+Nhịp bước rộn rang cũng là khi nghe đêm xuống
+Này hỡi người tình hãy cùng ta vui lên nào",anticipation,anticipation,False,,joy,joy,"Cảm giác sảng khoái, tươi vui và tràn đầy sức sống khi gác lại âu lo để đón nhận ánh nắng và gió mát ban mai.",False,False
+PILOT_14,Quên đi ưu phiền,Nhạc Trẻ,Vũ Quốc Việt,S14_2,2,3,False,,"Này hãy hát khúc hát cho tình yêu luôn khao khát
+Để thấy những ánh mắt luôn rạo rực lời lửa cháy
+Nào hãy hát để trái tim mình luôn nghe ước ao
+Rồi cũng sẽ có lúc mưa buồn qua cho nắng về",anticipation,anticipation,False,,anticipation,anticipation,"Sự lạc quan, kỳ vọng vào những điều tốt đẹp đang chờ đón phía trước và quyết tâm hướng tới tương lai.",True,True
+PILOT_14,Quên đi ưu phiền,Nhạc Trẻ,Vũ Quốc Việt,S14_3,3,3,False,,"Đừng trách, đừng hờn dẫu tình yêu kia phai màu
+Cuộc sống còn nhiều lắm vờ vĩnh hay đổi thay
+Hãy biết đừng lại nếu người đã nghe hối tiếc
+Đời chẳng nào ngờ lỡ một mai ta không còn",sadness,sadness,False,,anticipation,trust,"Sự bình an nội tại khi vết thương đã lành, lòng biết ơn quá khứ và niềm tin vững vàng vào sự kiên cường của bản thân.",False,False
+PILOT_15,Dâng mẹ La Vang,Nhạc Thánh ca,Phanxicô,S15_1,1,3,False,,"Dâng mẹ La Vang câu chúc khen từ Việt Nam
+Tà áo mẹ bay đã che rợp trên đất này
+Chúng con nay chẳng còn ngóng trông bao mỏi mòn
+Đường xa dương thế luôn luôn có mẹ có con.",trust,trust,False,,trust,trust,"Lòng thành kính, đức tin sâu sắc và sự phó thác cậy trông vào sự chở che của Đức Mẹ nơi đất thánh.",True,True
+PILOT_15,Dâng mẹ La Vang,Nhạc Thánh ca,Phanxicô,S15_2,2,3,False,,"Dâng mẹ La Vang đây các gia đình Việt Nam
+Ngày nắng ngày mưa sớm hôm ngược xuôi giữa đời
+Sống trong tay mẹ hiền, hết âu lo muộn phiền
+Mẹ đầy ơn phước cho muôn mái nhà ấm êm.",trust,trust,False,,trust,trust,Niềm tin cậy tìm về chốn nương tựa tâm linh an toàn dưới tà áo Mẹ để đón nhận sự bình an trước sóng gió cuộc đời.,True,True
+PILOT_15,Dâng mẹ La Vang,Nhạc Thánh ca,Phanxicô,S15_3,3,3,False,,"Xưa mẹ ủi an, lương giáo chung cảnh làm than
+Làng xóm Việt Nam có nhau tình sâu nghĩa đầy
+Bốn phương chung một nhà, nghĩa anh em mặn mà
+Mẹ thương liên kết muôn nơi chung hòa tiếng ca.",trust,trust,False,,trust,anticipation,"Lời cầu nguyện gửi gắm niềm hy vọng và mong ước về một tương lai thái bình cho quê hương, hòa thuận cho mọi gia đình.",False,True

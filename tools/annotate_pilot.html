@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ViEmoLyrics - Công cụ Gán nhãn Pilot Khổ thơ (A/B Setup)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --joy: #10b981;
+      --sadness: #3b82f6;
+      --anticipation: #f59e0b;
+      --trust: #8b5cf6;
+      --fear: #f97316;
+      --anger: #ef4444;
+      --disgust: #854d0e;
+      --surprise: #ec4899;
+      --neutral: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand { font-size: 1.1rem; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+    .badge { font-size: 0.75rem; padding: 3px 8px; border-radius: 999px; background: #0369a1; color: #e0f2fe; }
+    .nav-stats { display: flex; gap: 16px; align-items: center; font-size: 0.9rem; color: var(--text-muted); }
+    .progress-bar-container { width: 140px; height: 8px; background: #334155; border-radius: 4px; overflow: hidden; }
+    .progress-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
+
+    main { flex: 1; max-width: 900px; width: 100%; margin: 24px auto; padding: 0 16px; display: flex; flex-direction: column; gap: 20px; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    }
+
+    .song-meta { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px; }
+    .song-title { font-size: 1.35rem; font-weight: 700; color: #fff; }
+    .song-sub { font-size: 0.85rem; color: var(--text-muted); }
+
+    .mode-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .mode-a { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .mode-b { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+    .stanza-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 20px 24px;
+      font-size: 1.25rem;
+      line-height: 1.85;
+      color: #f1f5f9;
+      white-space: pre-wrap;
+      font-serif: Georgia, Cambria, serif;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .repeat-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .section-title { font-size: 0.95rem; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; }
+
+    .emotion-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 640px) {
+      .emotion-grid { grid-template-columns: 1fr; }
+    }
+
+    .btn-emo {
+      background: #1e293b;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #e2e8f0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .btn-emo:hover { background: #334155; border-color: #64748b; }
+    .btn-emo .key-hint {
+      background: #0f172a;
+      border: 1px solid #475569;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+    .btn-emo.selected {
+      border-width: 2px;
+      font-weight: 700;
+    }
+    .btn-emo.selected[data-emo="joy"] { border-color: var(--joy); background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .btn-emo.selected[data-emo="sadness"] { border-color: var(--sadness); background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+    .btn-emo.selected[data-emo="anticipation"] { border-color: var(--anticipation); background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .btn-emo.selected[data-emo="trust"] { border-color: var(--trust); background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
+    .btn-emo.selected[data-emo="fear"] { border-color: var(--fear); background: rgba(249, 115, 22, 0.15); color: #fb923c; }
+    .btn-emo.selected[data-emo="anger"] { border-color: var(--anger); background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .btn-emo.selected[data-emo="disgust"] { border-color: var(--disgust); background: rgba(133, 77, 14, 0.25); color: #d97706; }
+    .btn-emo.selected[data-emo="surprise"] { border-color: var(--surprise); background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+    .btn-emo.selected[data-emo="neutral"] { border-color: var(--neutral); background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+
+    .tags-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+    .tag-btn {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    .tag-btn.active {
+      background: #1e293b;
+      border-color: #38bdf8;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .action-bar { display: flex; justify-content: space-between; align-items: center; }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-primary { background: var(--accent); color: #0f172a; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #334155; color: #f8fafc; }
+    .btn-secondary:hover { background: #475569; }
+    .btn-success { background: #10b981; color: #0f172a; }
+    .btn-success:hover { background: #059669; }
+
+    /* Review Mode Stanza Cards */
+    .review-container { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+    .review-item {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .review-item.changed { border-color: #c084fc; background: rgba(192, 132, 252, 0.05); }
+    .review-header { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); }
+    .review-text { font-size: 1.05rem; line-height: 1.6; white-space: pre-wrap; }
+    .review-selector { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .review-select-btn {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+    .review-select-btn.active {
+      border-color: #c084fc;
+      background: rgba(192, 132, 252, 0.2);
+      color: #e9d5ff;
+      font-weight: 700;
+    }
+
+    footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      padding: 12px 24px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <span>🎵 ViEmoLyrics</span>
+      <span class="badge">Pilot Stanza Annotation (A/B Setup)</span>
+    </div>
+    <div class="nav-stats">
+      <span id="stat-song">Bài: 1 / 15</span>
+      <span id="stat-stanza">Khổ: 1 / 62</span>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <button class="btn btn-secondary" onclick="exportJSON()" style="padding: 6px 12px; font-size: 0.8rem;">💾 Tải kết quả JSON</button>
+      <button class="btn btn-secondary" onclick="exportCSV()" style="padding: 6px 12px; font-size: 0.8rem;">📊 Tải CSV</button>
+    </div>
+  </header>
+
+  <main id="app-container">
+    <!-- Dynamic content injected by JavaScript -->
+  </main>
+
+  <footer>
+    <div id="save-status">Đang nạp dữ liệu...</div>
+    <div>Phím tắt: [1..8, 0] Chọn cảm xúc | [Enter] Lưu & Tiếp theo | [←/→] Di chuyển</div>
+  </footer>
+
+  <script>
+    const EMOTIONS = [
+      { id: "joy", num: "1", vi: "Vui vẻ (Joy)", desc: "Vui tươi, hạnh phúc, hân hoan, hy vọng rạng rỡ" },
+      { id: "sadness", num: "2", vi: "Buồn bã (Sadness)", desc: "Buồn sầu, chia ly, cô đơn, nuối tiếc, xót xa" },
+      { id: "anticipation", num: "3", vi: "Mong chờ (Anticipation)", desc: "Trông ngóng, hoài niệm, khát khao, ngóng đợi" },
+      { id: "trust", num: "4", vi: "Tin cậy (Trust)", desc: "Thủy chung, biết ơn, tình nghĩa bền chặt, gắn kết quê hương" },
+      { id: "fear", num: "5", vi: "Lo sợ (Fear)", desc: "Bất an, hoang mang, sợ mất nhau, âu lo" },
+      { id: "anger", num: "6", vi: "Giận dữ (Anger)", desc: "Phẫn nộ, oán trách, bực bội, hờn ghen" },
+      { id: "disgust", num: "7", vi: "Chán ghét (Disgust)", desc: "Cay đắng, kinh tởm, ruồng bỏ, căm phẫn tiêu cực" },
+      { id: "surprise", num: "8", vi: "Bất ngờ (Surprise)", desc: "Ngỡ ngàng, sửng sốt, không ngờ tới" },
+      { id: "neutral", num: "0", vi: "Không rõ / Neutral", desc: "Không đủ bằng chứng hoặc cảm xúc trung tính" }
+    ];
+
+    const PILOT_DATA = [{"song_id": "PILOT_01", "corpus_song_id": "W8IU7U77", "title": "Một lần là người ấy", "composer": "Phan Viết Tính, Trung Ngon", "category": "Nhạc Trẻ", "url": "https://hopamviet.vn/chord/song/mot-lan-la-nguoi-ay/W8IU7U77.html", "total_stanzas": 5, "word_count": 134, "emolex_whole_song": "anticipation", "stanzas": [{"stanza_id": "S1_1", "stanza_idx": 1, "text": "Có rất nhiều chuyện anh muốn nói với em\nNhưng anh không đủ can đảm, để nói ra\nNên đành gói gọn trong tiếng thở dài.", "lines": ["Có rất nhiều chuyện anh muốn nói với em", "Nhưng anh không đủ can đảm, để nói ra", "Nên đành gói gọn trong tiếng thở dài."], "line_count": 3, "word_count": 26, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "neutral", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S1_2", "stanza_idx": 2, "text": "Có rất nhiều lần lầm tưởng hơi ấm đấy\nLà của anh thế nhưng không phải\nHóa ra là tia nắng mặt trời của người khác.", "lines": ["Có rất nhiều lần lầm tưởng hơi ấm đấy", "Là của anh thế nhưng không phải", "Hóa ra là tia nắng mặt trời của người khác."], "line_count": 3, "word_count": 26, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.3333, "disgust": 0.0, "fear": 0.0, "joy": 0.3333, "sadness": 0.0, "surprise": 0.3333, "trust": 0.0}}, {"stanza_id": "S1_3", "stanza_idx": 3, "text": "T-ĐK:\nTrái tim anh là gã mơ dính bụi trần hu wo wo\nVắng em thì anh cũng sai nhịp\nRồi lùi dần vào bóng tối.", "lines": ["T-ĐK:", "Trái tim anh là gã mơ dính bụi trần hu wo wo", "Vắng em thì anh cũng sai nhịp", "Rồi lùi dần vào bóng tối."], "line_count": 4, "word_count": 26, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "disgust", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 1.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S1_4", "stanza_idx": 4, "text": "Mong ước thấy mình là người ấy\nAnh cứ nghĩ mình là người ấy\nAnh ước muốn một, lần là người ấy\nĐể trọn vẹn được có em trong vài giây.", "lines": ["Mong ước thấy mình là người ấy", "Anh cứ nghĩ mình là người ấy", "Anh ước muốn một, lần là người ấy", "Để trọn vẹn được có em trong vài giây."], "line_count": 4, "word_count": 31, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 1.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S1_5", "stanza_idx": 5, "text": "Anh cố gắng nhưng chẳng ai hay\nNăm tháng ấy anh chắc không may\nNên đến sau một người gặm nhấm những nỗi đắng cay.", "lines": ["Anh cố gắng nhưng chẳng ai hay", "Năm tháng ấy anh chắc không may", "Nên đến sau một người gặm nhấm những nỗi đắng cay."], "line_count": 3, "word_count": 25, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "disgust", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 1.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}]}, {"song_id": "PILOT_02", "corpus_song_id": "W8IU6U8B", "title": "Lại một lần nữa", "composer": "Trịnh Lam", "category": "Nhạc Trẻ", "url": "https://hopamviet.vn/chord/song/lai-mot-lan-nua/W8IU6U8B.html", "total_stanzas": 5, "word_count": 202, "emolex_whole_song": "anticipation", "stanzas": [{"stanza_id": "S2_1", "stanza_idx": 1, "text": "Lại một lần nữa chia tay người yêu hỡi\nLại một lần nữa chia tay về hai lối, đường ai nấy đi\nKhóc cho nhiều, tình cũng đã vụt bay\nHứa cho nhiều, rồi mai khi tàn cơn say còn nhớ hay quên?", "lines": ["Lại một lần nữa chia tay người yêu hỡi", "Lại một lần nữa chia tay về hai lối, đường ai nấy đi", "Khóc cho nhiều, tình cũng đã vụt bay", "Hứa cho nhiều, rồi mai khi tàn cơn say còn nhớ hay quên?"], "line_count": 4, "word_count": 43, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anger", "emolex_scores": {"anger": 0.3333, "anticipation": 0.3333, "disgust": 0.0, "fear": 0.0, "joy": 0.3333, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S2_2", "stanza_idx": 2, "text": "Lại một lần nữa, cô đơn từng đêm vắng\nLại một lần nữa, cô đơn từng đêm trắng, vì sao hỡi em?\nGiữ trong lòng, càng nhung nhớ càng đau\nHãy quay về, cùng ai xây dựng tương lai, đang chờ đón em về.", "lines": ["Lại một lần nữa, cô đơn từng đêm vắng", "Lại một lần nữa, cô đơn từng đêm trắng, vì sao hỡi em?", "Giữ trong lòng, càng nhung nhớ càng đau", "Hãy quay về, cùng ai xây dựng tương lai, đang chờ đón em về."], "line_count": 4, "word_count": 44, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.5, "disgust": 0.0, "fear": 0.5, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S2_3", "stanza_idx": 3, "text": "T-ĐK:\nGiờ còn lại, bóng tối vây quanh đời anh\nĐời còn dài, rồi mai đây, không dám yêu một ai nữa.", "lines": ["T-ĐK:", "Giờ còn lại, bóng tối vây quanh đời anh", "Đời còn dài, rồi mai đây, không dám yêu một ai nữa."], "line_count": 3, "word_count": 22, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.5, "disgust": 0.0, "fear": 0.0, "joy": 0.25, "sadness": 0.0, "surprise": 0.0, "trust": 0.25}}, {"stanza_id": "S2_4", "stanza_idx": 4, "text": "Lại một lần nữa, chia tay người yêu hỡi, đường ai nấy đi\nLại một lần nữa, con tim chợt băng giá, vì hai chữ yêu thương\nLỡ yêu rồi, lời ai nói giờ như gió bay\nĐể giờ đây, ôm tình oan trái, riêng mình.", "lines": ["Lại một lần nữa, chia tay người yêu hỡi, đường ai nấy đi", "Lại một lần nữa, con tim chợt băng giá, vì hai chữ yêu thương", "Lỡ yêu rồi, lời ai nói giờ như gió bay", "Để giờ đây, ôm tình oan trái, riêng mình."], "line_count": 4, "word_count": 46, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.5, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S2_5", "stanza_idx": 5, "text": "Đường về hai lối anh mong được quên hết tình sao đắng cay\nĐường về hai lối đêm nay chợt băng giá, vì không có em yêu\nLỡ yêu rồi, mà sao nỡ vội quay bước đi\nĐể tình anh thêm một lần nữa, chợt nát tan.", "lines": ["Đường về hai lối anh mong được quên hết tình sao đắng cay", "Đường về hai lối đêm nay chợt băng giá, vì không có em yêu", "Lỡ yêu rồi, mà sao nỡ vội quay bước đi", "Để tình anh thêm một lần nữa, chợt nát tan."], "line_count": 4, "word_count": 47, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.5, "disgust": 0.1667, "fear": 0.0, "joy": 0.3333, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}]}, {"song_id": "PILOT_03", "corpus_song_id": "W8IUOU00", "title": "Nếu còn có kiếp sau", "composer": "Hamlet Trương", "category": "Nhạc Trẻ", "url": "https://hopamviet.vn/chord/song/neu-con-co-kiep-sau/W8IUOU00.html", "total_stanzas": 4, "word_count": 176, "emolex_whole_song": "joy", "stanzas": [{"stanza_id": "S3_1", "stanza_idx": 1, "text": "Kể từ ngày yêu em anh đã mơ hồ nhận ra mình thật mong manh\nSợ rằng cảm giác ấy chỉ đến với anh một lần với em\nRồi cuộc sống cho anh nhiều điều và cũng lấy đi thật nhiều điều\nNhưng thật may bên anh vẫn còn có em.", "lines": ["Kể từ ngày yêu em anh đã mơ hồ nhận ra mình thật mong manh", "Sợ rằng cảm giác ấy chỉ đến với anh một lần với em", "Rồi cuộc sống cho anh nhiều điều và cũng lấy đi thật nhiều điều", "Nhưng thật may bên anh vẫn còn có em."], "line_count": 4, "word_count": 51, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.2, "disgust": 0.0, "fear": 0.1, "joy": 0.4, "sadness": 0.0, "surprise": 0.0, "trust": 0.3}}, {"stanza_id": "S3_2", "stanza_idx": 2, "text": "Tựa đầu vào vai anh nước mắt em rơi bình yên, từng giọt long lanh\nGục đầu vào tim anh em ước chi em đừng yêu quá nhanh\nĐiều gì đó trong đôi mắt người làm cả thế gian như ngừng trôi\nChỉ vậy thôi anh không còn gì để nói.", "lines": ["Tựa đầu vào vai anh nước mắt em rơi bình yên, từng giọt long lanh", "Gục đầu vào tim anh em ước chi em đừng yêu quá nhanh", "Điều gì đó trong đôi mắt người làm cả thế gian như ngừng trôi", "Chỉ vậy thôi anh không còn gì để nói."], "line_count": 4, "word_count": 51, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.5, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S3_3", "stanza_idx": 3, "text": "Nếu một ngày ta phải buộc lòng buông đôi cánh tay\nVẫn muốn yêu em trọn kiếp này\nNếu như thật may mắn cuộc đời anh có kiếp sau\nVẫn xin được yêu em một lần nữa.", "lines": ["Nếu một ngày ta phải buộc lòng buông đôi cánh tay", "Vẫn muốn yêu em trọn kiếp này", "Nếu như thật may mắn cuộc đời anh có kiếp sau", "Vẫn xin được yêu em một lần nữa."], "line_count": 4, "word_count": 37, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.1, "anticipation": 0.2, "disgust": 0.0, "fear": 0.1, "joy": 0.3, "sadness": 0.1, "surprise": 0.0, "trust": 0.2}}, {"stanza_id": "S3_4", "stanza_idx": 4, "text": "Và nếu như cuộc đời anh buộc lòng phải đánh mất em\nChẳng muốn yêu thêm ai quá nhiều\nNhững năm dài yêu dấu mà lòng anh luôn chắt chiu\nXin em đừng xa anh tình yêu.", "lines": ["Và nếu như cuộc đời anh buộc lòng phải đánh mất em", "Chẳng muốn yêu thêm ai quá nhiều", "Những năm dài yêu dấu mà lòng anh luôn chắt chiu", "Xin em đừng xa anh tình yêu."], "line_count": 4, "word_count": 37, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.1818, "anticipation": 0.2727, "disgust": 0.0, "fear": 0.0909, "joy": 0.2727, "sadness": 0.0909, "surprise": 0.0, "trust": 0.0909}}]}, {"song_id": "PILOT_04", "corpus_song_id": "W8IU7F88", "title": "Anh hiểu em mà", "composer": "DK Lâm", "category": "Nhạc Trẻ", "url": "https://hopamviet.vn/chord/song/anh-hieu-em-ma/W8IU7F88.html", "total_stanzas": 4, "word_count": 159, "emolex_whole_song": "joy", "stanzas": [{"stanza_id": "S4_1", "stanza_idx": 1, "text": "Anh biết em chỉ cười nói bên ngoài như thế\nNhư ngấn sâu trong lòng còn nhiều suy tư\nEm vẫn hay nói em chẳng quan tâm muốn gì tùy anh\nNhưng sâu trong lòng mình là những nỗi buồn.", "lines": ["Anh biết em chỉ cười nói bên ngoài như thế", "Như ngấn sâu trong lòng còn nhiều suy tư", "Em vẫn hay nói em chẳng quan tâm muốn gì tùy anh", "Nhưng sâu trong lòng mình là những nỗi buồn."], "line_count": 4, "word_count": 40, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "sadness", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 1.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S4_2", "stanza_idx": 2, "text": "Anh hiểu em như thế nào nắng mưa như thế nào\nKhi nặng lời xong em lệ tràn khóe mắt\nEm nghĩ sau hàng trăm lần đôi khi em bất cần\nEm có chắc như thế làm mình vui.", "lines": ["Anh hiểu em như thế nào nắng mưa như thế nào", "Khi nặng lời xong em lệ tràn khóe mắt", "Em nghĩ sau hàng trăm lần đôi khi em bất cần", "Em có chắc như thế làm mình vui."], "line_count": 4, "word_count": 39, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.25, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.0, "surprise": 0.25, "trust": 0.0}}, {"stanza_id": "S4_3", "stanza_idx": 3, "text": "Em là như thế cứ ôm bao lo lắng một mình\nRồi gồng gánh bao nhiêu nỗi đau một mình\nĐôi lần em muốn nói buông tay cho khỏi đau đầu\nMà anh biết lòng em có vui gì đâu.", "lines": ["Em là như thế cứ ôm bao lo lắng một mình", "Rồi gồng gánh bao nhiêu nỗi đau một mình", "Đôi lần em muốn nói buông tay cho khỏi đau đầu", "Mà anh biết lòng em có vui gì đâu."], "line_count": 4, "word_count": 40, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "fear", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.5, "joy": 0.25, "sadness": 0.25, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S4_4", "stanza_idx": 4, "text": "Biết là mạnh mẽ đấy nhưng em đổi lấy được gì\nTại sao không sẻ chia với anh đôi phần\nAnh hiểu em hết đấy chẳng qua không nói thôi mà\nPhải mạnh mẽ người còn có anh đây mà.", "lines": ["Biết là mạnh mẽ đấy nhưng em đổi lấy được gì", "Tại sao không sẻ chia với anh đôi phần", "Anh hiểu em hết đấy chẳng qua không nói thôi mà", "Phải mạnh mẽ người còn có anh đây mà."], "line_count": 4, "word_count": 40, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "neutral", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}]}, {"song_id": "PILOT_05", "corpus_song_id": "W8IU8OA8", "title": "Sương mùa thu", "composer": "Joseph Nguyen (Quốc Hải)", "category": "Nhạc Trữ tình", "url": "https://hopamviet.vn/chord/song/suong-mua-thu/W8IU8OA8.html", "total_stanzas": 5, "word_count": 155, "emolex_whole_song": "sadness", "stanzas": [{"stanza_id": "S5_1", "stanza_idx": 1, "text": "Thành phố mùa thu sương giăng đường mờ\nĐèn đường héo hắt hàng cây khô\nLắng nghe lá rơi bên thềm, lê bước lang thang đời buồn\nHồn trôi theo lá tả tơi", "lines": ["Thành phố mùa thu sương giăng đường mờ", "Đèn đường héo hắt hàng cây khô", "Lắng nghe lá rơi bên thềm, lê bước lang thang đời buồn", "Hồn trôi theo lá tả tơi"], "line_count": 4, "word_count": 33, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "sadness", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 1.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S5_2", "stanza_idx": 2, "text": "Người ghé đời tôi như sương chiều tàn\nTình bay theo lá vàng rơi rơi\nVẫn nghe tiếng ai thì thầm lời hứa bên nhau vẹn tình\nNhòa ướt theo giọt sương thu", "lines": ["Người ghé đời tôi như sương chiều tàn", "Tình bay theo lá vàng rơi rơi", "Vẫn nghe tiếng ai thì thầm lời hứa bên nhau vẹn tình", "Nhòa ướt theo giọt sương thu"], "line_count": 4, "word_count": 33, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.3333, "disgust": 0.0, "fear": 0.0, "joy": 0.3333, "sadness": 0.0, "surprise": 0.0, "trust": 0.3333}}, {"stanza_id": "S5_3", "stanza_idx": 3, "text": ". Thu về làm dịu mát hồn ai\nThu về làm thổn thức hồn ai\nSương mờ tình giăng lối yêu xưa\nSương buồn tình theo lá bay", "lines": [". Thu về làm dịu mát hồn ai", "Thu về làm thổn thức hồn ai", "Sương mờ tình giăng lối yêu xưa", "Sương buồn tình theo lá bay"], "line_count": 4, "word_count": 28, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.25, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.25, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S5_4", "stanza_idx": 4, "text": "Thu về cùng làn gió mênh mang\nThu về tình theo lá thu rơi\nThương người ngồi sương ướt đôi vai\nSương buồn thoáng giăng bờ mi", "lines": ["Thu về cùng làn gió mênh mang", "Thu về tình theo lá thu rơi", "Thương người ngồi sương ướt đôi vai", "Sương buồn thoáng giăng bờ mi"], "line_count": 4, "word_count": 27, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "sadness", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 1.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S5_5", "stanza_idx": 5, "text": "Chợt nhớ người xưa trong sương chiều buồn\nHàng cây trút lá cành co ro,\nLắng nghe tiếng ai thì thầm , tiếc nuối cho cuộc tình gầy\nChìm khuất trong màn sương đêm", "lines": ["Chợt nhớ người xưa trong sương chiều buồn", "Hàng cây trút lá cành co ro,", "Lắng nghe tiếng ai thì thầm , tiếc nuối cho cuộc tình gầy", "Chìm khuất trong màn sương đêm"], "line_count": 4, "word_count": 34, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "sadness", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 1.0, "surprise": 0.0, "trust": 0.0}}]}, {"song_id": "PILOT_06", "corpus_song_id": "W8IU0FA6", "title": "Biển cạn", "composer": "Nguyễn Kim Tuấn", "category": "Nhạc Trữ tình", "url": "https://hopamviet.vn/chord/song/bien-can/W8IU0FA6.html", "total_stanzas": 4, "word_count": 159, "emolex_whole_song": "fear", "stanzas": [{"stanza_id": "S6_1", "stanza_idx": 1, "text": "Có người từ lâu nhớ thương biển\nNgày xưa biển xanh không như bây giờ biển là hoang vắng\nLời tôi nhỏ bé tiếng gió thét cao biển tràn nỗi đau\nTình em quá lớn sóng cũng vỡ tan đời tôi đánh mất\nGiấc mơ không còn biển xưa đã cạn", "lines": ["Có người từ lâu nhớ thương biển", "Ngày xưa biển xanh không như bây giờ biển là hoang vắng", "Lời tôi nhỏ bé tiếng gió thét cao biển tràn nỗi đau", "Tình em quá lớn sóng cũng vỡ tan đời tôi đánh mất", "Giấc mơ không còn biển xưa đã cạn"], "line_count": 5, "word_count": 51, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anger", "emolex_scores": {"anger": 0.2, "anticipation": 0.0, "disgust": 0.0, "fear": 0.2, "joy": 0.2, "sadness": 0.0, "surprise": 0.2, "trust": 0.2}}, {"stanza_id": "S6_2", "stanza_idx": 2, "text": "Vắng em trên đời biển thầm than khóc ngàn lần với tôi\nCùng tôi biển chết, cùng em biển tan\nNgàn năm nỗi đau hóa kiếp mây ngàn cô đơn biển cạn", "lines": ["Vắng em trên đời biển thầm than khóc ngàn lần với tôi", "Cùng tôi biển chết, cùng em biển tan", "Ngàn năm nỗi đau hóa kiếp mây ngàn cô đơn biển cạn"], "line_count": 3, "word_count": 32, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "fear", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.5, "joy": 0.0, "sadness": 0.5, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S6_3", "stanza_idx": 3, "text": "Có người hẹn tôi tới phương trời\nBiển xưa lắng nghe trắng xóa nỗi niềm biển không lên tiếng\nÐời tôi nhỏ bé trước những khát khao chìm trong nỗi đau\nTình em quá lớn với những đam mê làm nên oan trái\nSóng reo não nề hải âu không về", "lines": ["Có người hẹn tôi tới phương trời", "Biển xưa lắng nghe trắng xóa nỗi niềm biển không lên tiếng", "Ðời tôi nhỏ bé trước những khát khao chìm trong nỗi đau", "Tình em quá lớn với những đam mê làm nên oan trái", "Sóng reo não nề hải âu không về"], "line_count": 5, "word_count": 51, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "fear", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.5, "joy": 0.0, "sadness": 0.0, "surprise": 0.5, "trust": 0.0}}, {"stanza_id": "S6_4", "stanza_idx": 4, "text": "* Ðời tôi nhỏ bé trước những khát khao chìm trong nỗi đau\nNgàn năm nỗi đau hóa kiếp mây ngàn cô đơn biển cạn", "lines": ["* Ðời tôi nhỏ bé trước những khát khao chìm trong nỗi đau", "Ngàn năm nỗi đau hóa kiếp mây ngàn cô đơn biển cạn"], "line_count": 2, "word_count": 25, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "fear", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 1.0, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}]}, {"song_id": "PILOT_07", "corpus_song_id": "W8IUWI07", "title": "Tình xưa", "composer": "Lê Vinh Quang", "category": "Nhạc Trữ tình", "url": "https://hopamviet.vn/chord/song/tinh-xua/W8IUWI07.html", "total_stanzas": 3, "word_count": 182, "emolex_whole_song": "joy", "stanzas": [{"stanza_id": "S7_1", "stanza_idx": 1, "text": "Không gì vui bằng một sớm mai, thức giấc bên ai, nắng vui một ngày\nLy cà phê và con phố quen, sánh bước bên em, nắng mưa tìm đến\nBao mùa qua nồng say ái ân, quấn quít đêm xuân, gối chăn nồng ấm\nTháng năm dài còn nhớ thương nhiều, mộng ước chớ nhau, dấu yêu hẹn thề", "lines": ["Không gì vui bằng một sớm mai, thức giấc bên ai, nắng vui một ngày", "Ly cà phê và con phố quen, sánh bước bên em, nắng mưa tìm đến", "Bao mùa qua nồng say ái ân, quấn quít đêm xuân, gối chăn nồng ấm", "Tháng năm dài còn nhớ thương nhiều, mộng ước chớ nhau, dấu yêu hẹn thề"], "line_count": 4, "word_count": 60, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.2727, "disgust": 0.0, "fear": 0.0, "joy": 0.4545, "sadness": 0.0, "surprise": 0.1818, "trust": 0.0909}}, {"stanza_id": "S7_2", "stanza_idx": 2, "text": "Không gì vui bằng một giấc mơ, réo rắt bên tai những lời thương nhớ\nLối em về thêm bước chân người, nên tiếng đàn tôi cũng thêm lẻ loi\nBao mùa qua tình thêm cách xa, nắng úa bên sông, em về đôi bóng\nTiễn đưa người đường hoa ngập lối, tàn một đêm vui, là chết tình tôi", "lines": ["Không gì vui bằng một giấc mơ, réo rắt bên tai những lời thương nhớ", "Lối em về thêm bước chân người, nên tiếng đàn tôi cũng thêm lẻ loi", "Bao mùa qua tình thêm cách xa, nắng úa bên sông, em về đôi bóng", "Tiễn đưa người đường hoa ngập lối, tàn một đêm vui, là chết tình tôi"], "line_count": 4, "word_count": 60, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.2, "disgust": 0.0, "fear": 0.0, "joy": 0.6, "sadness": 0.0, "surprise": 0.2, "trust": 0.0}}, {"stanza_id": "S7_3", "stanza_idx": 3, "text": "Không gì đau bằng một cách xa, trước lúc chia tay, môi hôn ngọt ngào\nKhông gì xa bằng một lãng quên, lúc tiễn đưa em bước vui đường mới\nBao giờ em về thăm chốn xưa, nắng vẫn bên sông, bên đèn riêng bóng\nNếu đôi lần em nhớ tên người, một nắm đất bên đồi, ấp ôm một thân tôi", "lines": ["Không gì đau bằng một cách xa, trước lúc chia tay, môi hôn ngọt ngào", "Không gì xa bằng một lãng quên, lúc tiễn đưa em bước vui đường mới", "Bao giờ em về thăm chốn xưa, nắng vẫn bên sông, bên đèn riêng bóng", "Nếu đôi lần em nhớ tên người, một nắm đất bên đồi, ấp ôm một thân tôi"], "line_count": 4, "word_count": 62, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.1111, "disgust": 0.0, "fear": 0.1111, "joy": 0.5556, "sadness": 0.0, "surprise": 0.2222, "trust": 0.0}}]}, {"song_id": "PILOT_08", "corpus_song_id": "W8IU679Z", "title": "Đời vui với ai", "composer": "An Dân", "category": "Nhạc Trữ tình", "url": "https://hopamviet.vn/chord/song/doi-vui-voi-ai/W8IU679Z.html", "total_stanzas": 4, "word_count": 142, "emolex_whole_song": "joy", "stanzas": [{"stanza_id": "S8_1", "stanza_idx": 1, "text": "Khi em biết tình ta trong thầm lặng\nVà con tim ta mãi thuộc về nhau\nNào ai biết một mai ta xa cách\nMột dòng sông có nhớ về mùa đông.", "lines": ["Khi em biết tình ta trong thầm lặng", "Và con tim ta mãi thuộc về nhau", "Nào ai biết một mai ta xa cách", "Một dòng sông có nhớ về mùa đông."], "line_count": 4, "word_count": 32, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "neutral", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S8_2", "stanza_idx": 2, "text": "Khi em biết tình yêu ta tuyệt vọng\nVà con tim yêu dấu sẽ tàn phai\nTa đã mất lạc tìm nhau mãi mãi\nMột lần yêu, ân ái gió thu lay.", "lines": ["Khi em biết tình yêu ta tuyệt vọng", "Và con tim yêu dấu sẽ tàn phai", "Ta đã mất lạc tìm nhau mãi mãi", "Một lần yêu, ân ái gió thu lay."], "line_count": 4, "word_count": 32, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.375, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.125, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S8_3", "stanza_idx": 3, "text": "Và dòng sông đó đừng băng giá như mùa đông\nMộng lòng chưa phai, người yêu hỡi có bao giờ nguôi\nThời gian vẫn trôi, dòng đời cách ngăn đôi\nGiọt mưa vẫn rơi lạnh lùng tim tan vỡ.", "lines": ["Và dòng sông đó đừng băng giá như mùa đông", "Mộng lòng chưa phai, người yêu hỡi có bao giờ nguôi", "Thời gian vẫn trôi, dòng đời cách ngăn đôi", "Giọt mưa vẫn rơi lạnh lùng tim tan vỡ."], "line_count": 4, "word_count": 39, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.5, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S8_4", "stanza_idx": 4, "text": "Thì thôi anh nhé để em bước đi lẻ loi\nMột lần bên nhau tình như đã nhớ nhau dài lâu\nThì thôi nhé anh, tình là giác mơ thôi\nĐời vui với ai buồn nào mưa vẫn rơi.", "lines": ["Thì thôi anh nhé để em bước đi lẻ loi", "Một lần bên nhau tình như đã nhớ nhau dài lâu", "Thì thôi nhé anh, tình là giác mơ thôi", "Đời vui với ai buồn nào mưa vẫn rơi."], "line_count": 4, "word_count": 39, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.5, "surprise": 0.0, "trust": 0.0}}]}, {"song_id": "PILOT_09", "corpus_song_id": "W8IUZWZI", "title": "Từ miền xa người nghĩ về", "composer": "Hoài An", "category": "Nhạc Vàng", "url": "https://hopamviet.vn/chord/song/tu-mien-xa-nguoi-nghi-ve/W8IUZWZI.html", "total_stanzas": 3, "word_count": 135, "emolex_whole_song": "sadness", "stanzas": [{"stanza_id": "S9_1", "stanza_idx": 1, "text": "Vì cuộc máu xương năm xưa nên anh bỏ học lên đường\nTừ hạ đến thu sang đông quanh năm đã đầy nghĩa sống\nNhững chiều chìm lấn trong mây những chiều luyến nhớ dâng đầy\nLắm lần muốn mời các em ra đây thăm chơi cho biết một ngày", "lines": ["Vì cuộc máu xương năm xưa nên anh bỏ học lên đường", "Từ hạ đến thu sang đông quanh năm đã đầy nghĩa sống", "Những chiều chìm lấn trong mây những chiều luyến nhớ dâng đầy", "Lắm lần muốn mời các em ra đây thăm chơi cho biết một ngày"], "line_count": 4, "word_count": 50, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "fear", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.5, "joy": 0.0, "sadness": 0.5, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S9_2", "stanza_idx": 2, "text": "Ở đây những ngày hơn thua\nVới đời máu lửa ngỡ lòng mình\nQuên chuyện năm xưa\nNhưng mỗi khi chiến trường nghỉ ngơi\nThấy tình giăng rối theo\nTừng dòng kỉ niệm xa xôi", "lines": ["Ở đây những ngày hơn thua", "Với đời máu lửa ngỡ lòng mình", "Quên chuyện năm xưa", "Nhưng mỗi khi chiến trường nghỉ ngơi", "Thấy tình giăng rối theo", "Từng dòng kỉ niệm xa xôi"], "line_count": 6, "word_count": 35, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "sadness", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 1.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S9_3", "stanza_idx": 3, "text": "Dù đời đã xui anh đi trong cơn lửa đạn quên về\nDù đời khuất sau chân mây nhưng bao kỉ niệm còn đây\nNắng dù rực cháy xanh tươi mưa dù xoá vết chân người\nNhững dòng kỉ niệm vẫn nghe khơi lên bâng khuâng thương nhớ từng hồi", "lines": ["Dù đời đã xui anh đi trong cơn lửa đạn quên về", "Dù đời khuất sau chân mây nhưng bao kỉ niệm còn đây", "Nắng dù rực cháy xanh tươi mưa dù xoá vết chân người", "Những dòng kỉ niệm vẫn nghe khơi lên bâng khuâng thương nhớ từng hồi"], "line_count": 4, "word_count": 50, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.1, "anticipation": 0.1, "disgust": 0.0, "fear": 0.0, "joy": 0.3, "sadness": 0.2, "surprise": 0.1, "trust": 0.2}}]}, {"song_id": "PILOT_10", "corpus_song_id": "W8IUCBCU", "title": "Tháng Sáu trời mưa", "composer": "Mộng Thu Chi", "category": "Nhạc Vàng", "url": "https://hopamviet.vn/chord/song/thang-sau-troi-mua/W8IUCBCU.html", "total_stanzas": 5, "word_count": 156, "emolex_whole_song": "joy", "stanzas": [{"stanza_id": "S10_1", "stanza_idx": 1, "text": "Tháng Sáu mưa giăng trời\nChuyện tình yêu đôi mình ai gian dối\nMà chiều nay gió ru hồn ta say\nAnh hôn tình môi phai\nĐể khung trời mưa bay hay lệ đời.", "lines": ["Tháng Sáu mưa giăng trời", "Chuyện tình yêu đôi mình ai gian dối", "Mà chiều nay gió ru hồn ta say", "Anh hôn tình môi phai", "Để khung trời mưa bay hay lệ đời."], "line_count": 5, "word_count": 34, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.3333, "disgust": 0.0, "fear": 0.0, "joy": 0.6667, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S10_2", "stanza_idx": 2, "text": "Tháng Sáu mưa rơi nhiều\nChuyện tình yêu chưa lần quen chăn chiếu\nĐời gần nhau có nhau vì thương nhau\nGiấc mơ nào xuôi em\nBỏ quên người em yêu trong trời đêm.", "lines": ["Tháng Sáu mưa rơi nhiều", "Chuyện tình yêu chưa lần quen chăn chiếu", "Đời gần nhau có nhau vì thương nhau", "Giấc mơ nào xuôi em", "Bỏ quên người em yêu trong trời đêm."], "line_count": 5, "word_count": 34, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.5, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S10_3", "stanza_idx": 3, "text": "Cơn đau qua hồn tình theo gót son mềm\nCòn đâu phút êm đềm nụ môi anh là em.\nAnh đâu có ngờ tình đôi ta chóng phai\nNhư lá thu vàng chiều nay dưới trời mây", "lines": ["Cơn đau qua hồn tình theo gót son mềm", "Còn đâu phút êm đềm nụ môi anh là em.", "Anh đâu có ngờ tình đôi ta chóng phai", "Như lá thu vàng chiều nay dưới trời mây"], "line_count": 4, "word_count": 37, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anger", "emolex_scores": {"anger": 0.2, "anticipation": 0.2, "disgust": 0.0, "fear": 0.2, "joy": 0.2, "sadness": 0.0, "surprise": 0.0, "trust": 0.2}}, {"stanza_id": "S10_4", "stanza_idx": 4, "text": "Tháng Sáu mưa giăng trời\nChuyện tình yêu đôi mình ai gian dối\nTrời còn đây đất đây cảnh xưa đây\nKế bên người xưa đâu\nCó nghe từng cơn mưa qua hồn xưa", "lines": ["Tháng Sáu mưa giăng trời", "Chuyện tình yêu đôi mình ai gian dối", "Trời còn đây đất đây cảnh xưa đây", "Kế bên người xưa đâu", "Có nghe từng cơn mưa qua hồn xưa"], "line_count": 5, "word_count": 34, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anger", "emolex_scores": {"anger": 0.3333, "anticipation": 0.3333, "disgust": 0.0, "fear": 0.0, "joy": 0.3333, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S10_5", "stanza_idx": 5, "text": "Tháng sáu trời mưa\nMưa ngoài trời mưa trong đời\nMưa ru hồn mưa rơi mưa rơi", "lines": ["Tháng sáu trời mưa", "Mưa ngoài trời mưa trong đời", "Mưa ru hồn mưa rơi mưa rơi"], "line_count": 3, "word_count": 17, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "neutral", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}]}, {"song_id": "PILOT_11", "corpus_song_id": "W8IUAWDZ", "title": "Tình quê", "composer": "Trường Râu", "category": "Nhạc Quê hương", "url": "https://hopamviet.vn/chord/song/tinh-que/W8IUAWDZ.html", "total_stanzas": 5, "word_count": 160, "emolex_whole_song": "joy", "stanzas": [{"stanza_id": "S11_1", "stanza_idx": 1, "text": "Tôi sinh ra miền quê đầy nắng gió\nCát bụi mờ xóa lấp gót chân son\nTình quê hương lắng động hơi ấm mẹ\nCứ nghĩ về mà lòng nhớ không nguôi", "lines": ["Tôi sinh ra miền quê đầy nắng gió", "Cát bụi mờ xóa lấp gót chân son", "Tình quê hương lắng động hơi ấm mẹ", "Cứ nghĩ về mà lòng nhớ không nguôi"], "line_count": 4, "word_count": 32, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.1429, "disgust": 0.1429, "fear": 0.1429, "joy": 0.1429, "sadness": 0.1429, "surprise": 0.1429, "trust": 0.1429}}, {"stanza_id": "S11_2", "stanza_idx": 2, "text": "Nơi tôi sinh nhà tôi tường vách đất\nGió nồm chiều thoảng mát góc không gian\nMột không gian tình cha luôn che chở\nKhi nhớ về mà lệ cứ tuôn rơi", "lines": ["Nơi tôi sinh nhà tôi tường vách đất", "Gió nồm chiều thoảng mát góc không gian", "Một không gian tình cha luôn che chở", "Khi nhớ về mà lệ cứ tuôn rơi"], "line_count": 4, "word_count": 32, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 1.0, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S11_3", "stanza_idx": 3, "text": "Lòng tôi luôn nghĩ về quê hương ấm\nNhớ tình mẹ và ghi khắc tình cha\nĐồng quê xanh cánh cò vươn trong nắng\nNhớ bạn bè và cả lũy tre xanh", "lines": ["Lòng tôi luôn nghĩ về quê hương ấm", "Nhớ tình mẹ và ghi khắc tình cha", "Đồng quê xanh cánh cò vươn trong nắng", "Nhớ bạn bè và cả lũy tre xanh"], "line_count": 4, "word_count": 32, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.1, "disgust": 0.0, "fear": 0.0, "joy": 0.4, "sadness": 0.0, "surprise": 0.1, "trust": 0.4}}, {"stanza_id": "S11_4", "stanza_idx": 4, "text": "Quê Hương tôi nhà thưa tình vẫn thắm\nCứ nghĩ nhìn mà lòng nhớ thương cha\nMột quê hương đong đầy hơi {Dm] ấm mẹ\nMãi nhớ về mảnh đất quê tôi", "lines": ["Quê Hương tôi nhà thưa tình vẫn thắm", "Cứ nghĩ nhìn mà lòng nhớ thương cha", "Một quê hương đong đầy hơi {Dm] ấm mẹ", "Mãi nhớ về mảnh đất quê tôi"], "line_count": 4, "word_count": 32, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "fear", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.3333, "joy": 0.0, "sadness": 0.3333, "surprise": 0.0, "trust": 0.3333}}, {"stanza_id": "S11_5", "stanza_idx": 5, "text": "Lòng tôi luôn nghĩ về quê hương ấm\nNhớ tình mẹ và ghi khắc tình cha\nĐồng quê xanh cánh cò vươn trong nắng\nNhớ bạn bè và cả lũy tre xanh", "lines": ["Lòng tôi luôn nghĩ về quê hương ấm", "Nhớ tình mẹ và ghi khắc tình cha", "Đồng quê xanh cánh cò vươn trong nắng", "Nhớ bạn bè và cả lũy tre xanh"], "line_count": 4, "word_count": 32, "is_repeated": true, "dup_of_stanza_idx": 3, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.1, "disgust": 0.0, "fear": 0.0, "joy": 0.4, "sadness": 0.0, "surprise": 0.1, "trust": 0.4}}]}, {"song_id": "PILOT_12", "corpus_song_id": "W8IU6FA0", "title": "Quảng Nam một khúc ca", "composer": "Phạm Cẩm, Thơ: Hưng Thịnh", "category": "Nhạc Quê hương", "url": "https://hopamviet.vn/chord/song/quang-nam-mot-khuc-ca/W8IU6FA0.html", "total_stanzas": 4, "word_count": 154, "emolex_whole_song": "joy", "stanzas": [{"stanza_id": "S12_1", "stanza_idx": 1, "text": "Anh lại về thăm Quảng Nam yêu thương\nĐến với Hội An ngắm nhìn chiều Cửa Đại\nSông Thu Bồn soi bóng đẹp tựa tranh\nRau Trà Quế đậm đà tô mỳ Quảng\nNắng đẹp biển xanh An Bàng bao kỷ niệm\nTình đất tình người gắn kết với yêu thương.", "lines": ["Anh lại về thăm Quảng Nam yêu thương", "Đến với Hội An ngắm nhìn chiều Cửa Đại", "Sông Thu Bồn soi bóng đẹp tựa tranh", "Rau Trà Quế đậm đà tô mỳ Quảng", "Nắng đẹp biển xanh An Bàng bao kỷ niệm", "Tình đất tình người gắn kết với yêu thương."], "line_count": 6, "word_count": 51, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.2727, "disgust": 0.0, "fear": 0.0, "joy": 0.5455, "sadness": 0.0, "surprise": 0.0909, "trust": 0.0909}}, {"stanza_id": "S12_2", "stanza_idx": 2, "text": "Quảng Nam ơi! Quảng Nam ơi!\nTiếng vang xa có tự ngàn xưa\nMảnh đất địa linh anh hùng hào kiệt\nNhững chiến công một thời oanh liệt\nTrang sử vàng lưu mãi ngàn năm.", "lines": ["Quảng Nam ơi! Quảng Nam ơi!", "Tiếng vang xa có tự ngàn xưa", "Mảnh đất địa linh anh hùng hào kiệt", "Những chiến công một thời oanh liệt", "Trang sử vàng lưu mãi ngàn năm."], "line_count": 5, "word_count": 35, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.3333, "disgust": 0.0, "fear": 0.0, "joy": 0.3333, "sadness": 0.0, "surprise": 0.0, "trust": 0.3333}}, {"stanza_id": "S12_3", "stanza_idx": 3, "text": "Anh lại về thăm Quảng Nam yêu thương\nThánh địa Mỹ Sơn di tích Chàm cổ kính\nVề Duy Xuyên xem nghệ nhân dệt chiếu\nThăm làng chài năm tháng bám khơi xa.", "lines": ["Anh lại về thăm Quảng Nam yêu thương", "Thánh địa Mỹ Sơn di tích Chàm cổ kính", "Về Duy Xuyên xem nghệ nhân dệt chiếu", "Thăm làng chài năm tháng bám khơi xa."], "line_count": 4, "word_count": 33, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.5, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.0, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S12_4", "stanza_idx": 4, "text": "Địa đạo Kỳ Anh một thành đồng lũy thép\nTrung hậu đảm đang tượng Mẹ Thứ anh hùng\nTự hào thay quê hương Quảng Nam đất mẹ\nTrong dựng xây đẹp mãi những công trình.", "lines": ["Địa đạo Kỳ Anh một thành đồng lũy thép", "Trung hậu đảm đang tượng Mẹ Thứ anh hùng", "Tự hào thay quê hương Quảng Nam đất mẹ", "Trong dựng xây đẹp mãi những công trình."], "line_count": 4, "word_count": 35, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "trust", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.3333, "sadness": 0.0, "surprise": 0.0, "trust": 0.6667}}]}, {"song_id": "PILOT_13", "corpus_song_id": "W8IUUZA9", "title": "Tôi tin", "composer": "Lm. Thành Tâm", "category": "Nhạc Thánh ca", "url": "https://hopamviet.vn/chord/song/toi-tin/W8IUUZA9.html", "total_stanzas": 5, "word_count": 318, "emolex_whole_song": "trust", "stanzas": [{"stanza_id": "S13_1", "stanza_idx": 1, "text": "Tôi tin, tôi tin Chúa đã thương tôi\nNên Người đã phải chết, chết vì tôi\nNên tôi, nên tôi vẫn tin luôn\nTin Người hay tha thứ dù tội tôi trăm mối\nTôi tin, tôi tin Chúa vẫn thương tôi\nCho dù đời tôi bao phen giông tố\nMãi mãi Chúa là dòng nước trong\nDạt dào lòng xót thương, muôn đời chẳng hề vơi", "lines": ["Tôi tin, tôi tin Chúa đã thương tôi", "Nên Người đã phải chết, chết vì tôi", "Nên tôi, nên tôi vẫn tin luôn", "Tin Người hay tha thứ dù tội tôi trăm mối", "Tôi tin, tôi tin Chúa vẫn thương tôi", "Cho dù đời tôi bao phen giông tố", "Mãi mãi Chúa là dòng nước trong", "Dạt dào lòng xót thương, muôn đời chẳng hề vơi"], "line_count": 8, "word_count": 66, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "trust", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.125, "sadness": 0.0, "surprise": 0.125, "trust": 0.75}}, {"stanza_id": "S13_2", "stanza_idx": 2, "text": "Dù nhiều khi trong bóng đêm, nhìn trời trăng sao ôi đẹp quá\nNhưng biết đã mấy mùa nhìn lá, đã mấy chiều nhìn mưa,\nTôi thầm khen Thiên Chúa\nNhiều khi tôi nhường bước, trước đoàn xe tang qua thành phố\nThan trách Đấng Hoá Công vô tình, sao để khăn tang che mờ\nBao mái đầu còn xanh", "lines": ["Dù nhiều khi trong bóng đêm, nhìn trời trăng sao ôi đẹp quá", "Nhưng biết đã mấy mùa nhìn lá, đã mấy chiều nhìn mưa,", "Tôi thầm khen Thiên Chúa", "Nhiều khi tôi nhường bước, trước đoàn xe tang qua thành phố", "Than trách Đấng Hoá Công vô tình, sao để khăn tang che mờ", "Bao mái đầu còn xanh"], "line_count": 6, "word_count": 60, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.25, "surprise": 0.0, "trust": 0.25}}, {"stanza_id": "S13_3", "stanza_idx": 3, "text": "Tôi tin, tôi tin Chúa đã thương tôi\nNên Người đã phải chết, chết vì tôi\nNên tôi, nên tôi vẫn tin luôn\nTin Người hay tha thứ dù tội tôi trăm mối\nTôi tin, tôi tin Chúa vẫn thương tôi\nCho dù đời tôi bao phen giông tố\nMãi mãi Chúa là dòng nước trong\nDạt dào lòng xót thương, muôn đời chẳng hề vơi", "lines": ["Tôi tin, tôi tin Chúa đã thương tôi", "Nên Người đã phải chết, chết vì tôi", "Nên tôi, nên tôi vẫn tin luôn", "Tin Người hay tha thứ dù tội tôi trăm mối", "Tôi tin, tôi tin Chúa vẫn thương tôi", "Cho dù đời tôi bao phen giông tố", "Mãi mãi Chúa là dòng nước trong", "Dạt dào lòng xót thương, muôn đời chẳng hề vơi"], "line_count": 8, "word_count": 66, "is_repeated": true, "dup_of_stanza_idx": 1, "emolex_baseline": "trust", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.125, "sadness": 0.0, "surprise": 0.125, "trust": 0.75}}, {"stanza_id": "S13_4", "stanza_idx": 4, "text": "Dù nhiều khi tôi đã quên, người người quanh tôi đang gào đói\nMơ ước thấy chút tình nồng ấm, thấy chút lòng người thương\nChia hạt cơm manh áo\nNhiều khi tôi dừng bước, trên đường chông gai giăng ngập lối\nThan trách Đấng Hoá Công vô tình, sao nỡ phân ly đôi đường\nCho lắm người buồn đau", "lines": ["Dù nhiều khi tôi đã quên, người người quanh tôi đang gào đói", "Mơ ước thấy chút tình nồng ấm, thấy chút lòng người thương", "Chia hạt cơm manh áo", "Nhiều khi tôi dừng bước, trên đường chông gai giăng ngập lối", "Than trách Đấng Hoá Công vô tình, sao nỡ phân ly đôi đường", "Cho lắm người buồn đau"], "line_count": 6, "word_count": 60, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "disgust", "emolex_scores": {"anger": 0.0, "anticipation": 0.1667, "disgust": 0.3333, "fear": 0.1667, "joy": 0.0, "sadness": 0.3333, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S13_5", "stanza_idx": 5, "text": "Tôi tin, tôi tin Chúa đã thương tôi\nNên Người đã phải chết, chết vì tôi\nNên tôi, nên tôi vẫn tin luôn\nTin Người hay tha thứ dù tội tôi trăm mối\nTôi tin, tôi tin Chúa vẫn thương tôi\nCho dù đời tôi bao phen giông tố\nMãi mãi Chúa là dòng nước trong\nDạt dào lòng xót thương, muôn đời chẳng hề vơi", "lines": ["Tôi tin, tôi tin Chúa đã thương tôi", "Nên Người đã phải chết, chết vì tôi", "Nên tôi, nên tôi vẫn tin luôn", "Tin Người hay tha thứ dù tội tôi trăm mối", "Tôi tin, tôi tin Chúa vẫn thương tôi", "Cho dù đời tôi bao phen giông tố", "Mãi mãi Chúa là dòng nước trong", "Dạt dào lòng xót thương, muôn đời chẳng hề vơi"], "line_count": 8, "word_count": 66, "is_repeated": true, "dup_of_stanza_idx": 1, "emolex_baseline": "trust", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.125, "sadness": 0.0, "surprise": 0.125, "trust": 0.75}}]}, {"song_id": "PILOT_14", "corpus_song_id": "W8IUWEWU", "title": "Quên đi ưu phiền", "composer": "Vũ Quốc Việt", "category": "Nhạc Trẻ", "url": "https://hopamviet.vn/chord/song/quen-di-uu-phien/W8IUWEWU.html", "total_stanzas": 3, "word_count": 124, "emolex_whole_song": "joy", "stanzas": [{"stanza_id": "S14_1", "stanza_idx": 1, "text": "Làn gió chiều về bỗng chợt thoáng qua êm đềm\nLà lúc mặt trời sẽ dần khuất sau hàng cây\nNhịp bước rộn rang cũng là khi nghe đêm xuống\nNày hỡi người tình hãy cùng ta vui lên nào", "lines": ["Làn gió chiều về bỗng chợt thoáng qua êm đềm", "Là lúc mặt trời sẽ dần khuất sau hàng cây", "Nhịp bước rộn rang cũng là khi nghe đêm xuống", "Này hỡi người tình hãy cùng ta vui lên nào"], "line_count": 4, "word_count": 40, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "joy", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.5, "sadness": 0.5, "surprise": 0.0, "trust": 0.0}}, {"stanza_id": "S14_2", "stanza_idx": 2, "text": "Này hãy hát khúc hát cho tình yêu luôn khao khát\nĐể thấy những ánh mắt luôn rạo rực lời lửa cháy\nNào hãy hát để trái tim mình luôn nghe ước ao\nRồi cũng sẽ có lúc mưa buồn qua cho nắng về", "lines": ["Này hãy hát khúc hát cho tình yêu luôn khao khát", "Để thấy những ánh mắt luôn rạo rực lời lửa cháy", "Nào hãy hát để trái tim mình luôn nghe ước ao", "Rồi cũng sẽ có lúc mưa buồn qua cho nắng về"], "line_count": 4, "word_count": 44, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.3333, "disgust": 0.0, "fear": 0.0, "joy": 0.3333, "sadness": 0.1667, "surprise": 0.1667, "trust": 0.0}}, {"stanza_id": "S14_3", "stanza_idx": 3, "text": "Đừng trách, đừng hờn dẫu tình yêu kia phai màu\nCuộc sống còn nhiều lắm vờ vĩnh hay đổi thay\nHãy biết đừng lại nếu người đã nghe hối tiếc\nĐời chẳng nào ngờ lỡ một mai ta không còn", "lines": ["Đừng trách, đừng hờn dẫu tình yêu kia phai màu", "Cuộc sống còn nhiều lắm vờ vĩnh hay đổi thay", "Hãy biết đừng lại nếu người đã nghe hối tiếc", "Đời chẳng nào ngờ lỡ một mai ta không còn"], "line_count": 4, "word_count": 40, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "anticipation", "emolex_scores": {"anger": 0.0, "anticipation": 0.3333, "disgust": 0.0, "fear": 0.0, "joy": 0.3333, "sadness": 0.3333, "surprise": 0.0, "trust": 0.0}}]}, {"song_id": "PILOT_15", "corpus_song_id": "W8IUZ87F", "title": "Dâng mẹ La Vang", "composer": "Phanxicô", "category": "Nhạc Thánh ca", "url": "https://hopamviet.vn/chord/song/dang-me-la-vang/W8IUZ87F.html", "total_stanzas": 3, "word_count": 120, "emolex_whole_song": "trust", "stanzas": [{"stanza_id": "S15_1", "stanza_idx": 1, "text": "Dâng mẹ La Vang câu chúc khen từ Việt Nam\nTà áo mẹ bay đã che rợp trên đất này\nChúng con nay chẳng còn ngóng trông bao mỏi mòn\nĐường xa dương thế luôn luôn có mẹ có con.", "lines": ["Dâng mẹ La Vang câu chúc khen từ Việt Nam", "Tà áo mẹ bay đã che rợp trên đất này", "Chúng con nay chẳng còn ngóng trông bao mỏi mòn", "Đường xa dương thế luôn luôn có mẹ có con."], "line_count": 4, "word_count": 40, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "trust", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.0, "joy": 0.0, "sadness": 0.25, "surprise": 0.0, "trust": 0.75}}, {"stanza_id": "S15_2", "stanza_idx": 2, "text": "Dâng mẹ La Vang đây các gia đình Việt Nam\nNgày nắng ngày mưa sớm hôm ngược xuôi giữa đời\nSống trong tay mẹ hiền, hết âu lo muộn phiền\nMẹ đầy ơn phước cho muôn mái nhà ấm êm.", "lines": ["Dâng mẹ La Vang đây các gia đình Việt Nam", "Ngày nắng ngày mưa sớm hôm ngược xuôi giữa đời", "Sống trong tay mẹ hiền, hết âu lo muộn phiền", "Mẹ đầy ơn phước cho muôn mái nhà ấm êm."], "line_count": 4, "word_count": 40, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "trust", "emolex_scores": {"anger": 0.0, "anticipation": 0.1111, "disgust": 0.0, "fear": 0.1111, "joy": 0.1111, "sadness": 0.2222, "surprise": 0.1111, "trust": 0.3333}}, {"stanza_id": "S15_3", "stanza_idx": 3, "text": "Xưa mẹ ủi an, lương giáo chung cảnh làm than\nLàng xóm Việt Nam có nhau tình sâu nghĩa đầy\nBốn phương chung một nhà, nghĩa anh em mặn mà\nMẹ thương liên kết muôn nơi chung hòa tiếng ca.", "lines": ["Xưa mẹ ủi an, lương giáo chung cảnh làm than", "Làng xóm Việt Nam có nhau tình sâu nghĩa đầy", "Bốn phương chung một nhà, nghĩa anh em mặn mà", "Mẹ thương liên kết muôn nơi chung hòa tiếng ca."], "line_count": 4, "word_count": 40, "is_repeated": false, "dup_of_stanza_idx": null, "emolex_baseline": "trust", "emolex_scores": {"anger": 0.0, "anticipation": 0.0, "disgust": 0.0, "fear": 0.1111, "joy": 0.1111, "sadness": 0.2222, "surprise": 0.0, "trust": 0.5556}}]}];
+
+    // State management
+    let state = {
+      songIdx: 0,
+      stanzaIdxInSong: 0,
+      isReviewMode: false,
+      annotations: {} // key: stanza_id -> { label_a, label_b, tags: [] }
+    };
+
+    // Load from localStorage if present
+    const STORAGE_KEY = "viemolyrics_pilot_annotations_v1";
+    function loadSavedState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = jsonParse(saved);
+          state.annotations = parsed.annotations || {};
+          state.songIdx = parsed.songIdx || 0;
+          state.stanzaIdxInSong = parsed.stanzaIdxInSong || 0;
+          state.isReviewMode = parsed.isReviewMode || false;
+        } catch(e) {}
+      }
+    }
+    function jsonParse(str) { return JSON.parse(str); }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const now = new Date();
+      document.getElementById("save-status").innerText = "Đã lưu tự động lúc " + now.toLocaleTimeString();
+    }
+
+    function calculateGlobalStanzaIndex() {
+      let count = 0;
+      for (let i = 0; i < state.songIdx; i++) {
+        count += PILOT_DATA[i].stanzas.length;
+      }
+      return count + state.stanzaIdxInSong + 1;
+    }
+
+    function getTotalStanzas() {
+      return PILOT_DATA.reduce((acc, s) => acc + s.stanzas.length, 0);
+    }
+
+    function render() {
+      const currentSong = PILOT_DATA[state.songIdx];
+      const totalSongs = PILOT_DATA.length;
+      const totalStanzas = getTotalStanzas();
+      const currentGlobalStanza = calculateGlobalStanzaIndex();
+
+      document.getElementById("stat-song").innerText = `Bài: ${state.songIdx + 1} / ${totalSongs}`;
+      document.getElementById("stat-stanza").innerText = `Khổ: ${Math.min(currentGlobalStanza, totalStanzas)} / ${totalStanzas}`;
+      const pct = (currentGlobalStanza / totalStanzas) * 100;
+      document.getElementById("progress-bar").style.width = pct + "%";
+
+      const container = document.getElementById("app-container");
+      container.innerHTML = "";
+
+      if (state.isReviewMode) {
+        renderReviewMode(container, currentSong);
+      } else {
+        renderStanzaMode(container, currentSong);
+      }
+      saveState();
+    }
+
+    function renderStanzaMode(container, song) {
+      const stanza = song.stanzas[state.stanzaIdxInSong];
+      const stanzaId = stanza.stanza_id;
+      const curData = state.annotations[stanzaId] || { label_a: null, label_b: null, tags: [] };
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      let repeatBadge = "";
+      if (stanza.is_repeated) {
+        repeatBadge = `<div class="repeat-tag">🔁 Khổ điệp khúc lặp lại (từ Khổ ${stanza.dup_of_stanza_idx})</div>`;
+      }
+
+      card.innerHTML = `
+        <div class="song-meta">
+          <div>
+            <div class="song-title">${song.title}</div>
+            <div class="song-sub">Nhạc sĩ: ${song.composer} | Thể loại: ${song.category}</div>
+          </div>
+          <div style="font-size: 0.9rem; color: #94a3b8;">
+            Khổ ${state.stanzaIdxInSong + 1} / ${song.stanzas.length}
+          </div>
+        </div>
+
+        <div class="mode-indicator mode-a">
+          <span>🔍 BƯỚC 1: ĐÁNH GIÁ CỤC BỘ KHỔ THƠ (SETUP A)</span>
+          <span style="font-weight: 400; color: #94a3b8;">- Chỉ đọc riêng khổ này và chọn cảm xúc biểu đạt</span>
+        </div>
+
+        <div class="stanza-box">
+          ${repeatBadge}
+          ${escapeHtml(stanza.text)}
+        </div>
+
+        <div class="section-title">Chọn Cảm xúc Nổi bật của Khổ này (bấm phím 1..8 hoặc 0):</div>
+        <div class="emotion-grid" id="emo-grid"></div>
+
+        <div class="section-title">Đặc điểm ngôn ngữ nhận thấy trong khổ (tùy chọn):</div>
+        <div class="tags-row" id="tags-row">
+          <div class="tag-btn ${curData.tags.includes('phu_dinh') ? 'active' : ''}" onclick="toggleTag('${stanzaId}', 'phu_dinh')">[N] Phủ định (không/chưa/chẳng/hết...)</div>
+          <div class="tag-btn ${curData.tags.includes('an_du') ? 'active' : ''}" onclick="toggleTag('${stanzaId}', 'an_du')">[M] Ẩn dụ thi ca (mưa/đò/chiều/lá/sương...)</div>
+          <div class="tag-btn ${curData.tags.includes('tuong_phan') ? 'active' : ''}" onclick="toggleTag('${stanzaId}', 'tuong_phan')">[C] Mệnh đề tương phản (ngày xưa... giờ đây / dù... nhưng)</div>
+        </div>
+
+        <div class="action-bar">
+          <button class="btn btn-secondary" onclick="prevStanza()" ${state.songIdx === 0 && state.stanzaIdxInSong === 0 ? 'disabled style="opacity:0.4;"' : ''}>← Quay lại</button>
+          <button class="btn btn-primary" onclick="nextStanza()">Lưu & Tiếp theo →</button>
+        </div>
+      `;
+
+      container.appendChild(card);
+
+      const grid = card.querySelector("#emo-grid");
+      EMOTIONS.forEach(emo => {
+        const btn = document.createElement("div");
+        btn.className = "btn-emo" + (curData.label_a === emo.id ? " selected" : "");
+        btn.setAttribute("data-emo", emo.id);
+        btn.onclick = () => selectEmotion(stanzaId, emo.id);
+        btn.innerHTML = `
+          <div>
+            <div style="font-weight: 600;">${emo.vi}</div>
+            <div style="font-size: 0.75rem; color: #94a3b8;">${emo.desc}</div>
+          </div>
+          <span class="key-hint">${emo.num}</span>
+        `;
+        grid.appendChild(btn);
+      });
+    }
+
+    function renderReviewMode(container, song) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="song-meta">
+          <div>
+            <div class="song-title">${song.title}</div>
+            <div class="song-sub">Nhạc sĩ: ${song.composer} | Thể loại: ${song.category}</div>
+          </div>
+          <div style="font-size: 0.9rem; color: #a78bfa; font-weight: 600;">
+            Hoàn tất các khổ bài ${state.songIdx + 1} / ${PILOT_DATA.length}
+          </div>
+        </div>
+
+        <div class="mode-indicator mode-b">
+          <span>📖 BƯỚC 2: SOI TRONG NGỮ CẢNH TOÀN BÀI (SETUP B)</span>
+          <span style="font-weight: 400; color: #cbd5e1;">- Đọc mạch toàn bài xem có khổ nào bạn muốn đổi nhãn không</span>
+        </div>
+
+        <div class="review-container" id="review-list"></div>
+
+        <div class="action-bar">
+          <button class="btn btn-secondary" onclick="backToStanzaEdit()">← Xem lại từng khổ</button>
+          <button class="btn btn-success" onclick="confirmSongReview()">Xác nhận bài này & Sang bài tiếp theo →</button>
+        </div>
+      `;
+
+      container.appendChild(card);
+
+      const list = card.querySelector("#review-list");
+      song.stanzas.forEach((stanza, idx) => {
+        const stanzaId = stanza.stanza_id;
+        const curData = state.annotations[stanzaId] || { label_a: null, label_b: null, tags: [] };
+        const labelA = curData.label_a || "neutral";
+        const labelB = curData.label_b || labelA; // Default to labelA if not changed
+
+        const isChanged = labelB !== labelA;
+
+        const item = document.createElement("div");
+        item.className = "review-item" + (isChanged ? " changed" : "");
+        item.innerHTML = `
+          <div class="review-header">
+            <span><strong>Khổ ${idx + 1}</strong> (${stanza.word_count} từ)${stanza.is_repeated ? ' - [Lặp lại]' : ''}</span>
+            <span>Nhãn ban đầu (Setup A): <span style="color:#38bdf8; font-weight:600;">${getEmotionLabel(labelA)}</span></span>
+          </div>
+          <div class="review-text">${escapeHtml(stanza.text)}</div>
+          <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 4px;">Khi nhìn toàn bài, cảm xúc khổ này là:</div>
+          <div class="review-selector" id="sel-${stanzaId}"></div>
+        `;
+        list.appendChild(item);
+
+        const sel = item.querySelector(`#sel-${stanzaId}`);
+        EMOTIONS.forEach(emo => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "review-select-btn" + (labelB === emo.id ? " active" : "");
+          btn.innerText = emo.vi.split(" ")[0]; // short name
+          btn.title = emo.vi;
+          btn.onclick = () => {
+            curData.label_b = emo.id;
+            state.annotations[stanzaId] = curData;
+            render();
+          };
+          sel.appendChild(btn);
+        });
+      });
+    }
+
+    function selectEmotion(stanzaId, emoId) {
+      if (!state.annotations[stanzaId]) {
+        state.annotations[stanzaId] = { label_a: null, label_b: null, tags: [] };
+      }
+      state.annotations[stanzaId].label_a = emoId;
+      state.annotations[stanzaId].label_b = emoId; // Default B to A
+      render();
+    }
+
+    function toggleTag(stanzaId, tag) {
+      if (!state.annotations[stanzaId]) {
+        state.annotations[stanzaId] = { label_a: null, label_b: null, tags: [] };
+      }
+      const tags = state.annotations[stanzaId].tags || [];
+      const idx = tags.indexOf(tag);
+      if (idx >= 0) {
+        tags.splice(idx, 1);
+      } else {
+        tags.push(tag);
+      }
+      state.annotations[stanzaId].tags = tags;
+      render();
+    }
+
+    function nextStanza() {
+      const currentSong = PILOT_DATA[state.songIdx];
+      const stanza = currentSong.stanzas[state.stanzaIdxInSong];
+      const curData = state.annotations[stanza.stanza_id];
+      if (!curData || !curData.label_a) {
+        alert("Vui lòng chọn 1 nhãn cảm xúc cho khổ này (hoặc bấm 0 nếu không rõ) trước khi tiếp tục!");
+        return;
+      }
+
+      if (state.stanzaIdxInSong < currentSong.stanzas.length - 1) {
+        state.stanzaIdxInSong++;
+      } else {
+        // Finished all stanzas of this song -> go to Review Mode (Setup B)
+        state.isReviewMode = true;
+      }
+      render();
+    }
+
+    function prevStanza() {
+      if (state.stanzaIdxInSong > 0) {
+        state.stanzaIdxInSong--;
+      } else if (state.songIdx > 0) {
+        state.songIdx--;
+        state.stanzaIdxInSong = PILOT_DATA[state.songIdx].stanzas.length - 1;
+      }
+      state.isReviewMode = false;
+      render();
+    }
+
+    function backToStanzaEdit() {
+      state.isReviewMode = false;
+      state.stanzaIdxInSong = PILOT_DATA[state.songIdx].stanzas.length - 1;
+      render();
+    }
+
+    function confirmSongReview() {
+      if (state.songIdx < PILOT_DATA.length - 1) {
+        state.songIdx++;
+        state.stanzaIdxInSong = 0;
+        state.isReviewMode = false;
+        render();
+      } else {
+        alert("Chúc mừng bạn! Bạn đã hoàn thành toàn bộ 15 bài hát (62 khổ thơ) của tập Pilot! Hãy bấm 'Tải kết quả JSON' hoặc 'Tải CSV' ở góc trên để gửi nhé!");
+        render();
+      }
+    }
+
+    function getEmotionLabel(id) {
+      const found = EMOTIONS.find(e => e.id === id);
+      return found ? found.vi : id;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Keyboard handlers
+    window.addEventListener("keydown", (e) => {
+      if (state.isReviewMode) return;
+      const key = e.key;
+      const currentSong = PILOT_DATA[state.songIdx];
+      const stanza = currentSong.stanzas[state.stanzaIdxInSong];
+      const stanzaId = stanza.stanza_id;
+
+      const emo = EMOTIONS.find(m => m.num === key);
+      if (emo) {
+        selectEmotion(stanzaId, emo.id);
+        return;
+      }
+      if (key === "Enter" || key === "ArrowRight") {
+        nextStanza();
+      } else if (key === "ArrowLeft") {
+        prevStanza();
+      } else if (key.toLowerCase() === "n") {
+        toggleTag(stanzaId, "phu_dinh");
+      } else if (key.toLowerCase() === "m") {
+        toggleTag(stanzaId, "an_du");
+      } else if (key.toLowerCase() === "c") {
+        toggleTag(stanzaId, "tuong_phan");
+      }
+    });
+
+    // Export functions
+    function buildExportRecords() {
+      const records = [];
+      PILOT_DATA.forEach(song => {
+        song.stanzas.forEach(st => {
+          const ann = state.annotations[st.stanza_id] || {};
+          records.append ? null : records.push({
+            song_id: song.song_id,
+            title: song.title,
+            category: song.category,
+            composer: song.composer,
+            stanza_id: st.stanza_id,
+            stanza_idx: st.stanza_idx,
+            total_stanzas: song.total_stanzas,
+            is_repeated: st.is_repeated,
+            dup_of_stanza_idx: st.dup_of_stanza_idx,
+            stanza_text: st.text,
+            label_setup_a: ann.label_a || "",
+            label_setup_b: ann.label_b || ann.label_a || "",
+            is_changed_in_context: (ann.label_b && ann.label_b !== ann.label_a) || false,
+            linguistic_tags: (ann.tags || []).join(";"),
+            emolex_baseline: st.emolex_baseline
+          });
+        });
+      });
+      return records;
+    }
+
+    function exportJSON() {
+      const records = buildExportRecords();
+      const blob = new Blob([JSON.stringify(records, null, 2)], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "pilot_annotations_15songs.json";
+      a.click();
+    }
+
+    function exportCSV() {
+      const records = buildExportRecords();
+      if (!records.length) return;
+      const headers = Object.keys(records[0]);
+      const csvRows = [headers.join(",")];
+      records.forEach(r => {
+        const values = headers.map(h => {
+          let val = (r[h] === null || r[h] === undefined) ? "" : String(r[h]);
+          val = val.replace(/"/g, '""');
+          return `"${val}"`;
+        });
+        csvRows.push(values.join(","));
+      });
+      const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "pilot_annotations_15songs.csv";
+      a.click();
+    }
+
+    // Initialize
+    loadSavedState();
+    render();
+  </script>
+</body>
+</html>
