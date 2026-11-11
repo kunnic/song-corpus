@@ -20,6 +20,9 @@ wheels/
 *.tar.gz
 *.checkpoint
 
+# Legacy workspace & working scratch
+legacy/
+
 # Academic manuscripts & auxiliary output
 LaTeX2e+Proceedings+Template+ZIP/
 archive/
