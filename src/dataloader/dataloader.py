@@ -119,7 +119,8 @@ class CorpusDataloader(Dataloader):
             instance  =  CorpusInstance(
                 title             =  title,
                 lyrics_in_string  =  cleaned_lyrics,
-                lyrics_in_token   =  lyrics_in_token
+                lyrics_in_token   =  lyrics_in_token,
+                raw_lyrics        =  raw_lyrics,
             )
             instances.append(instance)
 
